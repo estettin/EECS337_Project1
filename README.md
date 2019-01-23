@@ -56,7 +56,7 @@ You are required to output your results in two different formats.
 -- Most Controversially Dressed: John Smith
 
 A json format compatible with the autograder; this is only containing the information for the minimum tasks. For example:
-```{
+`{
 "Host" : "Seth Meyers",
 "Best Motion Picture - Drama" : {
 "Presenters" : ["Barbra Streisand"],
@@ -67,15 +67,14 @@ A json format compatible with the autograder; this is only containing the inform
 "Presenters" : ["Alicia Vikander", "Michael Keaton"],
 "Nominees" : ["Lady Bird", "The Disaster Artist", "Get Out", "The Greatest Showman", "I, Tonya"],
 "Winner" : "Lady Bird"
-}```
-
+}`
  
 
 The Data:
-[{u'id': 554402424728072192, u'text': u'just had to scramble to find a golden globes stream for my brother. :D', u'user': {u'id': 19904553, u'screen_name': u'baumbaTz'}, u'timestamp_ms': u'1421014813011'}, {"text": "What?!? https://t.co/NSPtGtbCvO", "id_str": "950142397194821632"}, ...]
+`[{u'id': 554402424728072192, u'text': u'just had to scramble to find a golden globes stream for my brother. :D', u'user': {u'id': 19904553, u'screen_name': u'baumbaTz'}, u'timestamp_ms': u'1421014813011'}, {"text": "What?!? https://t.co/NSPtGtbCvO", "id_str": "950142397194821632"}, ...]`
 
 Tweets for 2015 were collected if they matched the query
-track=['gg','golden globes', 'golden globe', 'goldenglobe','goldenglobes','gg2015','gg15','goldenglobe2015','goldenglobe15','goldenglobes2015','goldenglobes15','redcarpet','red carpet','redcarpet15','redcarpet2015','nominees','nominee','globesparty','globesparties' ]
+`track=['gg','golden globes', 'golden globe', 'goldenglobe','goldenglobes','gg2015','gg15','goldenglobe2015','goldenglobe15','goldenglobes2015','goldenglobes15','redcarpet','red carpet','redcarpet15','redcarpet2015','nominees','nominee','globesparty','globesparties' ]`
 
 2013 used fewer keywords, as did 2018 and 2019. You will be graded on at least one year you have not seen.
 
