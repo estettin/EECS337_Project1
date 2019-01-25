@@ -3,7 +3,8 @@ from pprint import pprint as pp
 
 import pandas as pd
 from pandas.io.json import json_normalize
-from nltk.tokenize import TweetTokenizer
+# from nltk.tokenize import TweetTokenizer
+import pymongo
 
 """
 [{
@@ -15,11 +16,25 @@ from nltk.tokenize import TweetTokenizer
  ...
 ]"""
 
-with open('data/gg2013.json') as f:
-	gg2013 = json.load(f)
+# with open('data/gg2013.json') as f:
+# 	gg2013 = json.load(f)
 
-# pd.read_json(gg2013, orient=)
+connection = pymongo.MongoClient("mongodb://admin:admin@337-1-shard-00-00-tcqfq.mongodb.net:27017,337-1-shard-00-01-tcqfq.mongodb.net:27017,337-1-shard-00-02-tcqfq.mongodb.net:27017/test?ssl=true&ssl_cert_reqs=CERT_NONE&replicaSet=337-1-shard-0&authSource=admin")
+db = connection["gg_data"]
+col = db.gg2013
 
+print db.gg2013
+page = open('data/gg2013.json', 'r')
+gg2013 = json.loads(page.read())
+
+
+
+print "\n\n" + str(col)
 df = pd.DataFrame(json_normalize(gg2013))
+# for item in df:
+# 	col.insert(item)
+# print parsed[:10]
 
-pp(df.head(20))
+
+
+# pp(df.head(20))
