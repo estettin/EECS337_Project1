@@ -6,7 +6,7 @@ from nltk.tokenize import word_tokenize
 
 with open('gg2013.json') as f:
 	data = json.load(f)
-
+ 
 bkeystrings = []
 wkeystrings = []
 

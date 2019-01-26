@@ -35,7 +35,7 @@ for i in range(0,len(data)):
 			j = j + 1
 		stringlist.append(' '.join(tstring))
 
-
+ 
 
 sid = SentimentIntensityAnalyzer()
 sum = 0

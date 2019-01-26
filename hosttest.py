@@ -19,7 +19,7 @@ for i in range(0,len(data)):
 		swstring = [word for word in tstring if word.lower() not in stops]
 		j = 0
 		slen = len(swstring)
-		while j < slen:
+		while j < slen: 
 			swstring[j] = swstring[j].lower()
 			if not swstring[j].isalpha():
 				swstring.pop(j)
