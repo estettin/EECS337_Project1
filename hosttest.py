@@ -3,7 +3,6 @@ import nltk
 from pprint import pprint
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
-import results 
 
 with open('gg2013.json') as f:
 	data = json.load(f)
@@ -21,6 +20,7 @@ for i in range(0,len(data)):
 		j = 0
 		slen = len(swstring)
 		while j < slen:
+			swstring[j] = swstring[j].lower()
 			if not swstring[j].isalpha():
 				swstring.pop(j)
 				slen = slen - 1
@@ -29,7 +29,6 @@ for i in range(0,len(data)):
 				swstring.pop(j)
 				slen = slen - 1
 				continue
-			swstring[j] = swstring[j].lower()
 			j = j + 1
 		if len(swstring) > 1:
 			keystrings.append(list(nltk.bigrams(swstring)))
