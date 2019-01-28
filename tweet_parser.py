@@ -23,13 +23,13 @@ connection = pymongo.MongoClient("mongodb://admin:admin@337-1-shard-00-00-tcqfq.
 db = connection["gg_data"]
 col = db.gg2013
 
-print db.gg2013
+print(db.gg2013)
 page = open('data/gg2013.json', 'r')
 gg2013 = json.loads(page.read())
 
 
 
-print "\n\n" + str(col)
+print("\n\n", str(col))
 df = pd.DataFrame(json_normalize(gg2013))
 # for item in df:
 # 	col.insert(item)
