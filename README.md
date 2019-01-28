@@ -8,7 +8,7 @@ Presentations: Meetings to present your project will take place on Feb 18-19 and
 
 Project Deliverables:
 
-- All code must be in Python 2.7. You can use any Python package or NLP toolkit.
+- All code must be in Python 3.6. You can use any Python package or NLP toolkit.
 - You must use a publicly accessible repository such as Github, and commit code regularly. When pair programming, note in the commit message those who were present and involved. We use these logs to verify complaints about AWOL teammates, and to avoid penalizing the entire group for one student’s violation of academic integrity. We don’t look at the commits unless there’s something really wrong with the code, or there’s a complaint.
 - Please use the Python standard for imports described here: https://www.python.org/dev/peps/pep-0008/#imports (Links to an external site.)Links to an external site.
 Bundle all your code together, your submission will be a .zip file on canvas.
