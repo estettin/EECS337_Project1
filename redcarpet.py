@@ -1,11 +1,8 @@
 import json
 import nltk
 from pprint import pprint
-from nltk import corpus
-from nltk import tokenize
 from nltk.corpus import stopwords 
-from nltk.tokenize import word_tokenize 
-
+from nltk.tokenize import word_tokenize
 from tweet_parser import df_2013
 
 data = df_2013
