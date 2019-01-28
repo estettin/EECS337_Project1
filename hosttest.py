@@ -3,18 +3,18 @@ import nltk
 from pprint import pprint
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
+from tweet_parser import df_2013
 
-with open('gg2013.json') as f:
-	data = json.load(f)
+data = df_2013
 
 keystrings = []
 
 stops = set(stopwords.words('english'))
-stops.update([u"host",u"hosts",u"hosting",u"goldenglobes", u"golden", u"globes", u"rt", u"http"])
+stops.update(["host","hosts","hosting","goldenglobes", "golden", "globes", "rt", "http"])
 
 for i in range(0,len(data)):
-	if "host" in data[i]["text"].encode("UTF-8"):
-		string = ''.join([i if ord(i) < 128 else '' for i in data[i]["text"].encode("UTF-8")])
+	if "host" in data[i]:
+		string = ''.join([i if ord(i) < 128 else '' for i in data[i]])
 		tstring = word_tokenize(string)
 		swstring = [word for word in tstring if word.lower() not in stops]
 		j = 0

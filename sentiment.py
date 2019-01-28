@@ -8,18 +8,18 @@ from nltk.corpus import subjectivity
 from nltk.sentiment import SentimentAnalyzer
 from nltk.sentiment.util import *
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from tweet_parser import df_2013
 
-with open('gg2013.json') as f:
-	data = json.load(f)
+data = df_2013
 
 stringlist = []
 
 stops = set(stopwords.words('english'))
-stops.update([u"host",u"hosts",u"hosting",u"goldenglobes", u"golden", u"globes", u"rt", u"http"])
+stops.update(["host","hosts","hosting","goldenglobes", "golden", "globes", "rt", "http"])
 
 for i in range(0,len(data)):
-	if "Tina Fay" in data[i]["text"].encode("UTF-8") or "Amy Poehler" in data[i]["text"].encode("UTF-8") or "tina fay" in data[i]["text"].encode("UTF-8") or "amy poehler" in data[i]["text"].encode("UTF-8"):
-		string = ''.join([i if ord(i) < 128 else '' for i in data[i]["text"].encode("UTF-8")])
+	if "Tina Fay" in data[i] or "Amy Poehler" in data[i] or "tina fay" in data[i] or "amy poehler" in data[i]:
+		string = ''.join([i if ord(i) < 128 else '' for i in data[i]])
 		j = 0
 		tstring = word_tokenize(string)
 		slen = len(tstring)
