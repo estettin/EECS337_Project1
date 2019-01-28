@@ -56,7 +56,3 @@ elif avgscore < -.25:
 	print("Negative")
 else:
 	print("Neutral")
-
-
-	
-
