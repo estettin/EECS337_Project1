@@ -45,17 +45,17 @@ for sentence in stringlist:
 	#for k in sorted(ss):
 		#print('{0}: {1}, '.format(k, ss[k]), end='')
 avgscore = sum/len(stringlist)
-print "Avg score = " + str(avgscore)
+print("Avg score = " + str(avgscore))
 if avgscore > .5 :
-	print "Very Positive"
+	print("Very Positive")
 elif avgscore > .25:
-	print "Positive"
+	print("Positive")
 elif avgscore < -.5:
-	print "Very Negative"
+	print("Very Negative")
 elif avgscore < -.25:
-	print "Negative"
+	print("Negative")
 else:
-	print "Neutral"
+	print("Neutral")
 
 
 	
