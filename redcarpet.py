@@ -78,20 +78,20 @@ bmaxKey = ""
 wmaxCount = -1
 wmaxKey = ""
 
-print "BEST"
+print("BEST")
 for k in bd:
 	if bd[k] > 5:
 		print k, bd[k]
 	if bd[k] > bmaxCount:
 		bmaxCount = bd[k]
 		bmaxKey = k
-print "max: " + str(bmaxKey) + ", " + str(bmaxCount)
-print ""
-print "WORST"
+print("max: ", str(bmaxKey), ", ", str(bmaxCount))
+print("")
+print("WORST")
 for k in wd:
 	if wd[k] > 1:
-		print k, wd[k]
+		print(k, wd[k])
 	if wd[k] > wmaxCount:
 		wmaxCount = wd[k]
 		wmaxKey = k
-print "max: " + str(wmaxKey) + ", " + str(wmaxCount)
+print("max: ", str(wmaxKey), ", ", str(wmaxCount))
