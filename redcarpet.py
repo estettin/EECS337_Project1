@@ -6,18 +6,18 @@ from nltk import tokenize
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
 
-with open('gg2013.json') as f:
-	data = json.load(f)
- 
+from tweet_parser import df_2013
+
+data = df_2013
 bkeystrings = []
 wkeystrings = []
 
 stops = set(stopwords.words('english'))
-stops.update([u"best",u"worst",u"dressed",u"goldenglobes", u"golden", u"globes", u"rt", u"http", u"outfit", u"dress", u"tux", u"gown", u"tuxedo"])
+stops.update(["best","worst","dressed","goldenglobes", "golden", "globes", "rt", "http", "outfit", "dress", "tux", "gown", "tuxedo"])
 
 for i in range(0,len(data)):
-	if "best dressed" in data[i]["text"].encode("UTF-8") and "worst" not in data[i]["text"].encode("UTF-8"):
-		bstring = ''.join([i if ord(i) < 128 else '' for i in data[i]["text"].encode("UTF-8")])
+	if "best dressed" in data[i] and "worst" not in data[i]:
+		bstring = ''.join([z if ord(str(z)) < 128 else '' for z in data[i]])
 		btstring = word_tokenize(bstring)
 		bswstring = [word for word in btstring if word.lower() not in stops]
 		j = 0
@@ -31,8 +31,8 @@ for i in range(0,len(data)):
 			j = j + 1
 		if len(bswstring) > 1:
 			bkeystrings.append(list(nltk.bigrams(bswstring)))
-	elif "worst dressed" in data[i]["text"].encode("UTF-8") and "best" not in data[i]["text"].encode("UTF-8"):
-		wstring = ''.join([i if ord(i) < 128 else '' for i in data[i]["text"].encode("UTF-8")])
+	elif "worst dressed" in data[i] and "best" not in data[i]:
+		wstring = ''.join([i if ord(i) < 128 else '' for i in data[i]])
 		wtstring = word_tokenize(wstring)
 		wswstring = [word for word in wtstring if word.lower() not in stops]
 		j = 0
