@@ -12,20 +12,20 @@ class Results(object):
 
 def humanPrint(r):
 	if len(r.host) < 2:
-		print "Host: " + r.host[0]
+		print ("Host: ",r.host[0])
 	else:
-		print "Host: " + ', '.join(r.host)
-	print ""
+		print ("Host: ", ', '.join(r.host))
+	print ("")
 
 	for a in r.awards:
-		print "Award: " + a.name 
+		print ("Award: ", a.name)
 		if len(a.presenters) < 2:
-			print "Presenter: " + a.presenters[0]
+			print ("Presenter: ", a.presenters[0])
 		else:
-			print "Presenters: " + ', '.join(a.presenters)
-		print "Nominees: " + ', '.join(a.nominees)
-		print "Winner: " + a.winner
-		print ""
+			print ("Presenters: ",', '.join(a.presenters))
+		print ("Nominees: ",', '.join(a.nominees))
+		print ("Winner: ", a.winner)
+		print ("")
 
 def jsonPrint(r):
 	if len(r.host) < 2:
@@ -67,10 +67,10 @@ award2.winner = "Lady Bird"
 r.awards = [award1, award2]
 
 humanPrint(r)
-print ""
-print ""
-print ""
-print jsonPrint(r)
+print ("")
+print ("")
+print ("")
+print (jsonPrint(r))
 
 
 
