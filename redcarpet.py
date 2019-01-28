@@ -1,6 +1,8 @@
 import json
 import nltk
 from pprint import pprint
+from nltk import corpus
+from nltk import tokenize
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
 
@@ -81,7 +83,7 @@ wmaxKey = ""
 print("BEST")
 for k in bd:
 	if bd[k] > 5:
-		print k, bd[k]
+		print(k, bd[k])
 	if bd[k] > bmaxCount:
 		bmaxCount = bd[k]
 		bmaxKey = k
