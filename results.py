@@ -9,6 +9,9 @@ class Award(object):
 class Results(object):
 	host = []
 	awards = []
+	bestDressed = ""
+	worstDressed = ""
+	hostSentiment = ""
 
 def humanPrint(r):
 	if len(r.host) < 2:
