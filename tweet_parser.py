@@ -25,7 +25,7 @@ import pymongo
 #col = db.gg2013
 
 # print(db.gg2013)
-page = open('data/gg2013.json', 'r')
+page = open('gg2013.json', 'r')
 gg2013 = json.loads(page.read())
 
 # print("\n\n", str(col))
