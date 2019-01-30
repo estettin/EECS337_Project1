@@ -29,7 +29,7 @@ page = open('data/gg2013.json', 'r')
 gg2013 = json.loads(page.read())
 
 # print("\n\n", str(col))
-df_2013 = pd.DataFrame(json_normalize(gg2013)).get("text").str.lower().tolist()
+df_2013 = pd.DataFrame(json_normalize(gg2013)).get("text").tolist()
 	#tolist()
 # for item in df:
 # 	col.insert(item)
