@@ -10,7 +10,7 @@ bkeystrings = []
 wkeystrings = []
 
 stops = set(stopwords.words('english'))
-stops.update(["best","worst","dressed","goldenglobes", "golden", "globes", "rt", "http", "outfit", "dress", "tux", "gown", "tuxedo"])
+stops.update(["best","worst","dressed","goldenglobes", "golden", "globes", "rt", "http", "outfit", "dress", "tux", "gown", "tuxedo", "eredcarpet"])
 
 for i in range(0,len(data)):
 	if "best dressed" in data[i] and "worst" not in data[i]:

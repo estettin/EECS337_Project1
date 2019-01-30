@@ -7,39 +7,43 @@ import re
 from tweet_parser import df_2013
 import spacy
 
-
-data = df_2013
-
-keystrings = []
-
+# data = df_2013
 with open('gg2013.json') as f:
 	data = json.load(f)
 
-
-def findTweetsWithAwardName(data, awardname):
+def findTweetsWithAwardName(data, a):
+	awardname = a.regex
+	friendlyname= a.name
+	
 	keystrings = []
 	presenters = []
 	stringList = []
 	#found = 0
 	for i in range(0,len(data)):
-		x = re.findall(awardname, data[i]["text"], flags=re.IGNORECASE)
-		if x and "present" in data[i]["text"]:
+		for r in awardname:	
+			x = []
+			found = False
+			x = re.findall(awardname, data[i]["text"], flags=re.IGNORECASE)
+			if x:
+				found = True
+				break
+		if found and "present" in data[i]["text"]:
 			stringList.append(data[i]["text"])
-	presenters = getPresenters(stringList, awardname)
+	presenters = getPresenters(stringList, friendlyname)
 	if len(presenters) > 0:
-		print ("Award:", awardname)
+		print ("Award:", friendlyname)
 		print("Presenters", presenters)
 
 def getPresenters(stringList, awardname):
 	stops = set(stopwords.words('english'))
-	stops.update([u"host",u"hosts",u"hosting",u"goldenglobes", u"golden", u"globes", u"rt", u"http",u"@",u"#", u"movies", u"movie", u"award"])
+	stops.update(["host","hosts","hosting","goldenglobes", "golden", "globes", "rt", "http","@","#", "movies", "movie", "award"])
 	awardwords=' '.join(re.sub( r"([A-Z])", r" \1", awardname).split())
 	awardwords=word_tokenize(awardwords)
 	awardwords=[word for word in awardwords if word.isalpha()]
 	awardwords=[word.lower() for word in awardwords]
-	stops.update(awardwords)
+	stops.update(awardwords) 
 	stops.remove(u"and")
-	presenters = []
+	presenters = {}
 	for string in stringList:
 		leftside = string.split(" present")[0]
 		#print(leftside)
@@ -55,23 +59,48 @@ def getPresenters(stringList, awardname):
 			doc = nlp(leftside)
 		for ent in doc.ents:
 			if ent.label_ == "PERSON":
-				if ent.text not in presenters:
-					presenters.append(ent.text)
-	#process presenters
+				if ent.text in presenters:
+					presenters[ent.text] = presenters[ent.text] + 1
+				else:
+					presenters[ent.text] = 1
+				#process presenters (change to dictionary)
 	
 	return removeDuplicatePresenters(presenters)
 
-def removeDuplicatePresenters(presenters):
+def containsKeywords(string, keywords):
+	for k in keywords:
+		if not k in string:
+			return False
+	return True
+
+def removeDuplicatePresenters(presenters): #change to dictionary 
 	finalpresenters = []
-	for i in range(0, len(presenters)):
+	for k in presenters:
 		subset = False
-		for j in range(0,len(presenters)):
-			if not i == j:
-				if presenters[i] in presenters[j]:
+		for kk in presenters:
+			if not k == kk:
+				if k in kk:
 					subset = True
+					presenters[kk] = presenters[kk] + presenters[k]
 		if not subset:
-			finalpresenters.append(presenters[i])
+			finalpresenters.append((k, presenters[k]))
 	return finalpresenters
+
+class award(object):
+	name = ""
+	regex = ""
+	awardtype = ""
+
+award1 = award()
+award1.name = "Best Motion Picture - Drama"
+award1.regex = 'Best Motion Picture(.*)Drama'
+award1.awardtype = "movie"
+
+## GET RID OF ACTOR/ACTRESS IN NOT PPL AWARDS
+
+award2 = award()
+award2.name = "Best Actress Picture - Drama"
+award2.regex = 'Best Actress(.*)Motion Picture(.*)Drama'
 
 
 awards = ['Best Motion Picture(.*)Drama',
@@ -101,7 +130,7 @@ awards = ['Best Motion Picture(.*)Drama',
 'Best (TV|Television) Series(.*)Musical(.*)Comedy',
 'Best Actor(.*)(TV|Television) Series(.*)Musical(.*)Comedy']
 
-for a in awards:
-	findTweetsWithAwardName(data, a)	
+# for a in awards:
+# 	findTweetsWithAwardName(data, a)	
 
-
+findTweetsWithAwardName(data, award1)
