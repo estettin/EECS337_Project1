@@ -87,6 +87,9 @@ def getRedCarpetInfo(data):
 			bmaxCount = bd[k]
 			bmaxKey = k
 	print("max: ", str(bmaxKey), ", ", str(bmaxCount))
+	r = {}
+	name = [bmaxKey[0].capitalize(), bmaxKey[1].capitalize()]
+	r["best"] = ' '.join(name)
 	print("")
 	print("WORST")
 	for k in wd:
@@ -96,5 +99,8 @@ def getRedCarpetInfo(data):
 			wmaxCount = wd[k]
 			wmaxKey = k
 	print("max: ", str(wmaxKey), ", ", str(wmaxCount))
-
-getRedCarpetInfo(data)
+	name = [wmaxKey[0].capitalize(), wmaxKey[1].capitalize()]
+	r["worst"] = ' '.join(name)
+	return r
+x = getRedCarpetInfo(data)
+print(x)
