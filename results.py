@@ -77,6 +77,12 @@ print (jsonPrint(r))
 
 
 
+# Find host
+#set host
+
+results = Results()
+results.host = 
+results.hostSentiment = sentiment.sent
 
 
 

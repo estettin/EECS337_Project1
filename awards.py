@@ -23,7 +23,7 @@ def findTweetsWithAwardName(data, a):
 		for r in awardname:	
 			x = []
 			found = False
-			x = re.findall(awardname, data[i]["text"], flags=re.IGNORECASE)
+			x = re.findall(r, data[i]["text"], flags=re.IGNORECASE)
 			if x:
 				found = True
 				break
@@ -93,7 +93,7 @@ class award(object):
 
 award1 = award()
 award1.name = "Best Motion Picture - Drama"
-award1.regex = 'Best Motion Picture(.*)Drama'
+award1.regex = ['Best Motion Picture(.*)Drama']
 award1.awardtype = "movie"
 
 ## GET RID OF ACTOR/ACTRESS IN NOT PPL AWARDS
