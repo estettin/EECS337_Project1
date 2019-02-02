@@ -6,7 +6,7 @@ from nltk.tokenize import word_tokenize
 import re
 from tweet_parser import df_2013
 import spacy
-
+import config
 # data = df_2013
 with open('gg2013.json') as f:
 	data = json.load(f)
@@ -18,7 +18,7 @@ def findTweetsWithAwardName(data, a):
 	keystrings = []
 	presenters = []
 	stringList = []
-	#found = 0
+	found = False
 	for i in range(0,len(data)):
 		for r in awardname:	
 			x = []
@@ -30,6 +30,7 @@ def findTweetsWithAwardName(data, a):
 		if found and "present" in data[i]["text"]:
 			stringList.append(data[i]["text"])
 	presenters = getPresenters(stringList, friendlyname)
+	# print (stringList)
 	if len(presenters) > 0:
 		print ("Award:", friendlyname)
 		print("Presenters", presenters)
@@ -86,22 +87,10 @@ def removeDuplicatePresenters(presenters): #change to dictionary
 			finalpresenters.append((k, presenters[k]))
 	return finalpresenters
 
-class award(object):
-	name = ""
-	regex = ""
-	awardtype = ""
-
-award1 = award()
-award1.name = "Best Motion Picture - Drama"
-award1.regex = ['Best Motion Picture(.*)Drama']
-award1.awardtype = "movie"
-
-## GET RID OF ACTOR/ACTRESS IN NOT PPL AWARDS
-
-award2 = award()
-award2.name = "Best Actress Picture - Drama"
-award2.regex = 'Best Actress(.*)Motion Picture(.*)Drama'
-
+# class award(object):
+# 	name = ""
+# 	regex = ""
+# 	awardtype = ""
 
 awards = ['Best Motion Picture(.*)Drama',
 'Best Actress(.*)Motion Picture(.*)Drama',
@@ -132,5 +121,5 @@ awards = ['Best Motion Picture(.*)Drama',
 
 # for a in awards:
 # 	findTweetsWithAwardName(data, a)	
-
-findTweetsWithAwardName(data, award1)
+for a in config.awardarray:
+	findTweetsWithAwardName(data, a)
