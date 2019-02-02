@@ -53,15 +53,16 @@ def sentinmentOfPeople(people, data):
 	avgscore = sum/len(stringlist)
 	#print("Avg score = " + str(avgscore))
 	if avgscore > .5 :
-		print("Very Positive")
+		return"Very Positive"
 	elif avgscore > .25:
-		print("Positive")
+		return"Positive"
 	elif avgscore < -.5:
-		print("Very Negative")
+		return"Very Negative"
 	elif avgscore < -.25:
-		print("Negative")
+		return"Negative"
 	else:
-		print("Neutral")
+		return"Neutral"
 
-sentinmentOfPeople(["Tina Fey", "Amy Poehler"], data)
+x = sentinmentOfPeople(["Tina Fey", "Amy Poehler"], data)
 
+print(x)

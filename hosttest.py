@@ -59,6 +59,6 @@ def getHostNames(data):
 		if d[k] > (maxCount*4/5):
 			hosts.append(k[0].capitalize() + " " + k[1].capitalize())
 
-	print(hosts)
+	return hosts
 
 getHostNames(data)
