@@ -3,60 +3,66 @@ import nltk
 from pprint import pprint
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
-from tweet_parser import df_2013
+from populate_db import tweets2013 #, tweets2015
 
-data = df_2013
 
-keystrings = []
+""" Gets the name(s) of the host(s) given a set of tweets """
+def getHost(tweets):
+	if tweets == None:
+		tweets = tweets2013
 
-stops = set(stopwords.words('english'))
-stops.update(["host","hosts","hosting","goldenglobes", "golden", "globes", "rt", "http"])
+	keystrings = []
 
-for i in range(0,len(data)):
-	if "host" in data[i]:
-		string = ''.join([i if ord(i) < 128 else '' for i in data[i]])
-		tstring = word_tokenize(string)
-		swstring = [word for word in tstring if word.lower() not in stops]
-		j = 0
-		slen = len(swstring)
-		while j < slen: 
-			swstring[j] = swstring[j].lower()
-			if not swstring[j].isalpha():
-				swstring.pop(j)
-				slen = slen - 1
-				continue
-			if "host" in swstring[j].lower():
-				swstring.pop(j)
-				slen = slen - 1
-				continue
-			j = j + 1
-		if len(swstring) > 1:
-			keystrings.append(list(nltk.bigrams(swstring)))
+	stops = set(stopwords.words('english'))
+	stops.update(["host","hosts","hosting","goldenglobes", "golden", "globes", "rt", "http"])
 
-finalbigrams = []
+	for i in range(0,len(tweets)):
+		if "host" in tweets[i]:
+			string = ''.join([i if ord(i) < 128 else '' for i in tweets[i]])
+			tstring = word_tokenize(string)
+			swstring = [word for word in tstring if word.lower() not in stops]
+			j = 0
+			slen = len(swstring)
+			while j < slen: 
+				swstring[j] = swstring[j].lower()
+				if not swstring[j].isalpha():
+					swstring.pop(j)
+					slen = slen - 1
+					continue
+				if "host" in swstring[j].lower():
+					swstring.pop(j)
+					slen = slen - 1
+					continue
+				j = j + 1
+			if len(swstring) > 1:
+				keystrings.append(list(nltk.bigrams(swstring)))
 
-for x in keystrings:
-	if x not in finalbigrams:
-		finalbigrams.append(x)
+	finalbigrams = []
 
-d = {}
-for x in finalbigrams:
-	for y in x:
-		if y in d:
-			d[y] = d[y] + 1
-		else:
-			d[y] = 1
+	for x in keystrings:
+		if x not in finalbigrams:
+			finalbigrams.append(x)
 
-maxCount = -1
-maxKey = ""
-hosts = []
-for k in d:
-	if d[k] > maxCount:
-		maxCount = d[k]
-		maxKey = k
-## top 2 (are they names)
-for k in d:
-	if d[k] > (maxCount*4/5):
-		hosts.append(k[0].capitalize() + " " + k[1].capitalize())
+	d = {}
+	for x in finalbigrams:
+		for y in x:
+			if y in d:
+				d[y] = d[y] + 1
+			else:
+				d[y] = 1
 
-print(hosts)
+	maxCount = -1
+	maxKey = ""
+	hosts = []
+	for k in d:
+		if d[k] > maxCount:
+			maxCount = d[k]
+			maxKey = k
+	## top 2 (are they names)
+	for k in d:
+		if d[k] > (maxCount*4/5):
+			hosts.append(k[0].capitalize() + " " + k[1].capitalize())
+
+
+	# print(hosts)
+	return hosts

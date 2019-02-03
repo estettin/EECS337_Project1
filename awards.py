@@ -4,13 +4,10 @@ from pprint import pprint
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
 import re
-from tweet_parser import df_2013
+from populate_db import tweets2013#, tweets2015
 import spacy
 
-# data = df_2013
-with open('gg2013.json') as f:
-	data = json.load(f)
-
+data = tweets2013
 def findTweetsWithAwardName(data, a):
 	awardname = a.regex
 	friendlyname= a.name
@@ -23,16 +20,16 @@ def findTweetsWithAwardName(data, a):
 		for r in awardname:	
 			x = []
 			found = False
-			x = re.findall(r, data[i]["text"], flags=re.IGNORECASE)
+			x = re.findall(r, data[i], flags=re.IGNORECASE)
 			if x:
 				found = True
 				break
-		if found and "present" in data[i]["text"]:
-			stringList.append(data[i]["text"])
+		if found and "present" in data[i]:
+			stringList.append(data[i])
 	presenters = getPresenters(stringList, friendlyname)
-	if len(presenters) > 0:
-		print ("Award:", friendlyname)
-		print("Presenters", presenters)
+	# if len(presenters) > 0:
+	# 	print ("Award:", friendlyname)
+	# 	print("Presenters", presenters)
 
 def getPresenters(stringList, awardname):
 	stops = set(stopwords.words('english'))

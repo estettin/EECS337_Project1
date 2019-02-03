@@ -12,6 +12,16 @@ class Results(object):
 	bestDressed = ""
 	worstDressed = ""
 	hostSentiment = ""
+	year = None
+
+	def __init__(self, host=[], awards=[], bestDressed="",
+				 worstDressed="", hostSentiment="", year=None):
+		self.host = host
+		self.awards = awards
+		self.bestDressed = bestDressed
+		self.worstDressed = worstDressed
+		self.hostSentiment = hostSentiment
+		self.year = year	
 
 def humanPrint(r):
 	if len(r.host) < 2:
@@ -80,9 +90,9 @@ print (jsonPrint(r))
 # Find host
 #set host
 
-results = Results()
-results.host = 
-results.hostSentiment = sentiment.sent
+# results = Results()
+# results.host = 
+# results.hostSentiment = sentiment.sent
 
 
 

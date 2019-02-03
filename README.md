@@ -91,3 +91,9 @@ The master repository is at [https://github.com/milara/gg-project-master] (Links
 A copy of the autograder program, which will assess how well you did on the basic tasks. It has undergone some changes as the project format has changed, so please report bugs early and often so that I can get it fixed ASAP.
 A template for the API the autograder uses, saved as gg_api.py. Be sure to read the doc strings and ask the TA if you have any questions about how to use this file.
 JSON files with the correct answers for the minimum tasks for both 2013 and 2015; these are used by the autograder. DO NOT read this into memory in your own code. Doing so is grounds for an automatic zero.
+
+
+TO SET UP:
+
+python3 -m spacy download en_core_web_sm
+pip3 install -r requirements.txt

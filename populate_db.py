@@ -17,10 +17,11 @@ def connect_to_client():
 	client = pymongo.MongoClient('mongodb://admin:admin@337-1-shard-00-00-tcqfq.mongodb.net:27017,337-1-shard-00-01-tcqfq.mongodb.net:27017,337-1-shard-00-02-tcqfq.mongodb.net:27017/test?ssl=true&ssl_cert_reqs=CERT_NONE&replicaSet=337-1-shard-0&authSource=admin')
 	db = client.GoldenGlobes
 	serverStatusResult= db.command("serverStatus")
-	pp(serverStatusResult)
+	pp("connected")
+	# pp(serverStatusResult)
 	return db
 
-def get_tweets(file_path, collection_name):
+def getTweets(file_path, collection_name):
 	db = connect_to_client()
 	if collection_name not in db.list_collection_names():
 		populate_db(file_path, collection_name, db)
@@ -30,6 +31,6 @@ def get_tweets(file_path, collection_name):
 
 
 # count 174643
-tweets2013 = get_tweets('data/gg2013.json', 'gg2013')
+tweets2013 = getTweets('data/gg2013.json', 'gg2013')
 # count 1754153
-tweets2015 = get_tweets('data/gg2015.json', 'gg2015')
+# tweets2015 = getTweets('data/gg2015.json', 'gg2015')
