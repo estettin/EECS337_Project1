@@ -9,6 +9,8 @@ import spacy
 
 tweets = df_2013
 punc = [".",":","-","!","?"]
+lhs = ["wins", "Wins", "for", "wins" "#goldenglobe" "golden globe" "Golden Globe"]
+rhs = ["goes", ""]
 """
 Phrases to look for:
 wins _______ for
