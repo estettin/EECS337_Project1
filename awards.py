@@ -9,6 +9,8 @@ import spacy
 import config
 
 data = tweets2013
+
+print(data[0])
 def findTweetsWithAwardName(data, a):
 	awardname = a.regex
 	friendlyname= a.name
@@ -28,6 +30,8 @@ def findTweetsWithAwardName(data, a):
 		if found and "present" in data[i]:
 			stringList.append(data[i])
 	presenters = getPresenters(stringList, friendlyname)
+	return presenters
+
   
 	# if len(presenters) > 0:
 	# 	print ("Award:", friendlyname)
@@ -63,7 +67,6 @@ def getPresenters(stringList, awardname):
 				else:
 					presenters[ent.text] = 1
 				#process presenters (change to dictionary)
-	
 	return removeDuplicatePresenters(presenters)
 
 def containsKeywords(string, keywords):
@@ -120,4 +123,4 @@ awards = ['Best Motion Picture(.*)Drama',
 # for a in awards:
 # 	findTweetsWithAwardName(data, a)	
 for a in config.awardarray:
-	findTweetsWithAwardName(data, a)
+	print (findTweetsWithAwardName(data, a))

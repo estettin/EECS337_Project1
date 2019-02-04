@@ -63,7 +63,7 @@ def sentinmentOfPeople(people, data):
 	else:
 		return "Neutral"
 
-# sentinmentOfPeople(["Tina Fey", "Amy Poehler"], data)
+x = sentinmentOfPeople(["Tina Fey", "Amy Poehler"], data)
 
 
 print(x)
