@@ -2,12 +2,12 @@ import json
 import nltk
 from pprint import pprint
 from nltk.corpus import stopwords 
-from nltk.tokenize import word_tokenize 
+from nltk.tokenize import word_tokenize
 from populate_db import tweets2013 #, tweets2015
 
 
 """ Gets the name(s) of the host(s) given a set of tweets """
-def getHost(tweets):
+def getHost(tweets=None):
 	if tweets == None:
 		tweets = tweets2013
 
@@ -63,6 +63,6 @@ def getHost(tweets):
 		if d[k] > (maxCount*4/5):
 			hosts.append(k[0].capitalize() + " " + k[1].capitalize())
 
-
-	# print(hosts)
 	return hosts
+
+

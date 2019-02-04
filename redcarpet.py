@@ -5,26 +5,18 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from populate_db import tweets2013 #, tweets2015
 
-class RedCarpet(object):
-	bestDressed = ""
-	worstDressed = ""
+data = tweets2013
 
-	def __init__(self, best, worst):
-		self.bestDressed = best
-		self.worstDressed = worst
-
-def getBestAndWorstDressed(tweets=None):
-	if tweets == None:
-		tweets = tweets2013
+def getRedCarpetInfo(data):
 	bkeystrings = []
 	wkeystrings = []
 
 	stops = set(stopwords.words('english'))
 	stops.update(["best","worst","dressed","goldenglobes", "golden", "globes", "rt", "http", "outfit", "dress", "tux", "gown", "tuxedo", "eredcarpet"])
 
-	for i in range(0,len(tweets)):
-		if "best dressed" in tweets[i] and "worst" not in tweets[i]:
-			bstring = ''.join([z if ord(str(z)) < 128 else '' for z in tweets[i]])
+	for i in range(0,len(data)):
+		if "best dressed" in data[i] and "worst" not in data[i]:
+			bstring = ''.join([z if ord(str(z)) < 128 else '' for z in data[i]])
 			btstring = word_tokenize(bstring)
 			bswstring = [word for word in btstring if word.lower() not in stops]
 			j = 0
@@ -38,8 +30,8 @@ def getBestAndWorstDressed(tweets=None):
 				j = j + 1
 			if len(bswstring) > 1:
 				bkeystrings.append(list(nltk.bigrams(bswstring)))
-		elif "worst dressed" in tweets[i] and "best" not in tweets[i]:
-			wstring = ''.join([i if ord(i) < 128 else '' for i in tweets[i]])
+		elif "worst dressed" in data[i] and "best" not in data[i]:
+			wstring = ''.join([i if ord(i) < 128 else '' for i in data[i]])
 			wtstring = word_tokenize(wstring)
 			wswstring = [word for word in wtstring if word.lower() not in stops]
 			j = 0
@@ -87,25 +79,30 @@ def getBestAndWorstDressed(tweets=None):
 	wmaxCount = -1
 	wmaxKey = ""
 
-	# print("BEST")
+	print("BEST")
 	for k in bd:
-		# if bd[k] > 5:
-			# print(k, bd[k])
+		if bd[k] > 5:
+			print(k, bd[k])
 		if bd[k] > bmaxCount:
 			bmaxCount = bd[k]
 			bmaxKey = k
-	# print("max: ", str(bmaxKey), ", ", str(bmaxCount))
-	# print("")
-	# print("WORST")
+	print("max: ", str(bmaxKey), ", ", str(bmaxCount))
+	r = {}
+	name = [bmaxKey[0].capitalize(), bmaxKey[1].capitalize()]
+	r["best"] = ' '.join(name)
+	print("")
+	print("WORST")
 	for k in wd:
-		# if wd[k] > 1:
-		# 	# print(k, wd[k])
+		if wd[k] > 1:
+			print(k, wd[k])
 		if wd[k] > wmaxCount:
 			wmaxCount = wd[k]
 			wmaxKey = k
+	print("max: ", str(wmaxKey), ", ", str(wmaxCount))
+	name = [wmaxKey[0].capitalize(), wmaxKey[1].capitalize()]
+	r["worst"] = ' '.join(name)
+	return r
 
-	# print("max: ", str(wmaxKey), ", ", str(wmaxCount))
-	
-	return RedCarpet(("%s, %s" % bmaxKey, bmaxCount), ("%s, %s" % wmaxKey, wmaxCount))
+x = getRedCarpetInfo(data)
+print(x)
 
-getBestAndWorstDressed()

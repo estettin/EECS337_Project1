@@ -65,3 +65,5 @@ def sentinmentOfPeople(people, data):
 
 # sentinmentOfPeople(["Tina Fey", "Amy Poehler"], data)
 
+
+print(x)
