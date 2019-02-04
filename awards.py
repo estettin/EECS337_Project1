@@ -4,13 +4,13 @@ from pprint import pprint
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
 import re
-from tweet_parser import df_2013
+from populate_db import tweets2013#, tweets2015
 import spacy
+import config
 
-# data = df_2013
-with open('gg2013.json') as f:
-	data = json.load(f)
+data = tweets2013
 
+print(data[0])
 def findTweetsWithAwardName(data, a):
 	awardname = a.regex
 	friendlyname= a.name
@@ -18,21 +18,24 @@ def findTweetsWithAwardName(data, a):
 	keystrings = []
 	presenters = []
 	stringList = []
-	#found = 0
+	found = False
 	for i in range(0,len(data)):
 		for r in awardname:	
 			x = []
 			found = False
-			x = re.findall(r, data[i]["text"], flags=re.IGNORECASE)
+			x = re.findall(r, data[i], flags=re.IGNORECASE)
 			if x:
 				found = True
 				break
-		if found and "present" in data[i]["text"]:
-			stringList.append(data[i]["text"])
+		if found and "present" in data[i]:
+			stringList.append(data[i])
 	presenters = getPresenters(stringList, friendlyname)
-	if len(presenters) > 0:
-		print ("Award:", friendlyname)
-		print("Presenters", presenters)
+	return presenters
+
+  
+	# if len(presenters) > 0:
+	# 	print ("Award:", friendlyname)
+	# 	print("Presenters", presenters)
 
 def getPresenters(stringList, awardname):
 	stops = set(stopwords.words('english'))
@@ -64,7 +67,6 @@ def getPresenters(stringList, awardname):
 				else:
 					presenters[ent.text] = 1
 				#process presenters (change to dictionary)
-	
 	return removeDuplicatePresenters(presenters)
 
 def containsKeywords(string, keywords):
@@ -86,22 +88,10 @@ def removeDuplicatePresenters(presenters): #change to dictionary
 			finalpresenters.append((k, presenters[k]))
 	return finalpresenters
 
-class award(object):
-	name = ""
-	regex = ""
-	awardtype = ""
-
-award1 = award()
-award1.name = "Best Motion Picture - Drama"
-award1.regex = ['Best Motion Picture(.*)Drama']
-award1.awardtype = "movie"
-
-## GET RID OF ACTOR/ACTRESS IN NOT PPL AWARDS
-
-award2 = award()
-award2.name = "Best Actress Picture - Drama"
-award2.regex = 'Best Actress(.*)Motion Picture(.*)Drama'
-
+# class award(object):
+# 	name = ""
+# 	regex = ""
+# 	awardtype = ""
 
 awards = ['Best Motion Picture(.*)Drama',
 'Best Actress(.*)Motion Picture(.*)Drama',
@@ -132,5 +122,5 @@ awards = ['Best Motion Picture(.*)Drama',
 
 # for a in awards:
 # 	findTweetsWithAwardName(data, a)	
-
-findTweetsWithAwardName(data, award1)
+for a in config.awardarray:
+	print (findTweetsWithAwardName(data, a))
