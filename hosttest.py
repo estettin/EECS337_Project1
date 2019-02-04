@@ -2,19 +2,23 @@ import json
 import nltk
 from pprint import pprint
 from nltk.corpus import stopwords 
-from nltk.tokenize import word_tokenize 
-from tweet_parser import df_2013
+from nltk.tokenize import word_tokenize
+from populate_db import tweets2013 #, tweets2015
 
-data = df_2013
-def getHostNames(data):
+
+""" Gets the name(s) of the host(s) given a set of tweets """
+def getHost(tweets=None):
+	if tweets == None:
+		tweets = tweets2013
+
 	keystrings = []
 
 	stops = set(stopwords.words('english'))
 	stops.update(["host","hosts","hosting","goldenglobes", "golden", "globes", "rt", "http"])
 
-	for i in range(0,len(data)):
-		if "host" in data[i]:
-			string = ''.join([i if ord(i) < 128 else '' for i in data[i]])
+	for i in range(0,len(tweets)):
+		if "host" in tweets[i]:
+			string = ''.join([i if ord(i) < 128 else '' for i in tweets[i]])
 			tstring = word_tokenize(string)
 			swstring = [word for word in tstring if word.lower() not in stops]
 			j = 0
@@ -61,4 +65,4 @@ def getHostNames(data):
 
 	return hosts
 
-getHostNames(data)
+

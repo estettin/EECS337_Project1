@@ -3,9 +3,9 @@ import nltk
 from pprint import pprint
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize
-from tweet_parser import df_2013
+from populate_db import tweets2013 #, tweets2015
 
-data = df_2013
+data = tweets2013
 
 def getRedCarpetInfo(data):
 	bkeystrings = []
@@ -102,5 +102,7 @@ def getRedCarpetInfo(data):
 	name = [wmaxKey[0].capitalize(), wmaxKey[1].capitalize()]
 	r["worst"] = ' '.join(name)
 	return r
+
 x = getRedCarpetInfo(data)
 print(x)
+

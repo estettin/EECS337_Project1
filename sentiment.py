@@ -8,9 +8,9 @@ from nltk.corpus import subjectivity
 from nltk.sentiment import SentimentAnalyzer
 from nltk.sentiment.util import *
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from tweet_parser import df_2013
+from populate_db import tweets2013 #, tweets2015
 
-data = df_2013
+data = tweets2013
 
 stringlist = []
 
@@ -53,16 +53,17 @@ def sentinmentOfPeople(people, data):
 	avgscore = sum/len(stringlist)
 	#print("Avg score = " + str(avgscore))
 	if avgscore > .5 :
-		return"Very Positive"
+		return "Very Positive"
 	elif avgscore > .25:
-		return"Positive"
+		return "Positive"
 	elif avgscore < -.5:
-		return"Very Negative"
+		return "Very Negative"
 	elif avgscore < -.25:
-		return"Negative"
+		return "Negative"
 	else:
-		return"Neutral"
+		return "Neutral"
 
-x = sentinmentOfPeople(["Tina Fey", "Amy Poehler"], data)
+# sentinmentOfPeople(["Tina Fey", "Amy Poehler"], data)
+
 
 print(x)
