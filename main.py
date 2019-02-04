@@ -4,7 +4,6 @@ from populate_db import tweets2013, getTweets
 from awards import *
 from results import *
 from sentiment import *
-
 from pprint import pprint as pp
 import pandas as pd
 import json
