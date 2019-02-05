@@ -10,7 +10,6 @@ import config
 
 data = tweets2013
 
-print(data[0])
 def findTweetsWithAwardName(data, a):
 	awardname = a.regex
 	friendlyname= a.name
@@ -120,7 +119,5 @@ awards = ['Best Motion Picture(.*)Drama',
 'Best (TV|Television) Series(.*)Musical(.*)Comedy',
 'Best Actor(.*)(TV|Television) Series(.*)Musical(.*)Comedy']
 
-# for a in awards:
-# 	findTweetsWithAwardName(data, a)	
-for a in config.awardarray:
-	print (findTweetsWithAwardName(data, a))
+# for a in config.awardarray:
+# 	print (findTweetsWithAwardName(data, a))
