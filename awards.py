@@ -10,25 +10,16 @@ import config
 
 data = tweets2013
 
-def findTweetsWithAwardName(data, a):
-	awardname = a.regex
-	friendlyname= a.name
-	
-	keystrings = []
+def findTweetsWithAwardName(a, tweets):
 	presenters = []
-	stringList = []
-	found = False
-	for i in range(0,len(data)):
-		for r in awardname:	
-			x = []
-			found = False
-			x = re.findall(r, data[i], flags=re.IGNORECASE)
-			if x:
-				found = True
-				break
-		if found and "present" in data[i]:
-			stringList.append(data[i])
-	presenters = getPresenters(stringList, friendlyname)
+	finaltweets = []
+	bytweets = []
+	for t in tweets:
+		if "presented by" in t:
+			bytweets.append(t)
+		if "present" in t:
+			finaltweets.append(t)
+	presenters = getPresenters(finaltweets, bytweets, a.name)
 	return presenters
 
   
@@ -36,7 +27,7 @@ def findTweetsWithAwardName(data, a):
 	# 	print ("Award:", friendlyname)
 	# 	print("Presenters", presenters)
 
-def getPresenters(stringList, awardname):
+def getPresenters(stringList, byStringList, awardname):
 	stops = set(stopwords.words('english'))
 	stops.update(["host","hosts","hosting","goldenglobes", "golden", "globes", "rt", "http","@","#", "movies", "movie", "award"])
 	awardwords=' '.join(re.sub( r"([A-Z])", r" \1", awardname).split())
@@ -59,12 +50,33 @@ def getPresenters(stringList, awardname):
 		nlp = spacy.load('en_core_web_sm')
 		if leftside:
 			doc = nlp(leftside)
-		for ent in doc.ents:
-			if ent.label_ == "PERSON":
-				if ent.text in presenters:
-					presenters[ent.text] = presenters[ent.text] + 1
-				else:
-					presenters[ent.text] = 1
+			for ent in doc.ents:
+				if ent.label_ == "PERSON":
+					if ent.text in presenters:
+						presenters[ent.text] = presenters[ent.text] + 1
+					else:
+						presenters[ent.text] = 1
+				#process presenters (change to dictionary)
+	for string in byStringList:
+		rightside = string.split("presented by")[1]
+		# print(rightside)
+		#print(leftside)
+		rightside = ' '.join(re.sub( r"([A-Z])", r" \1", rightside).split())
+		trightside = word_tokenize(rightside)
+		rightside = [word for word in trightside if word.lower() not in stops]
+		# leftside = ' '.join(leftside)
+		rightside = " ".join(rightside)
+		rightside = re.sub(r'\s([?.,!"](?:\s|$))', r'\1', rightside)
+		#print (leftside)
+		nlp = spacy.load('en_core_web_sm')
+		if rightside:
+			doc = nlp(rightside)
+			for ent in doc.ents:
+				if ent.label_ == "PERSON":
+					if ent.text in presenters:
+						presenters[ent.text] = presenters[ent.text] + 1
+					else:
+						presenters[ent.text] = 1
 				#process presenters (change to dictionary)
 	return removeDuplicatePresenters(presenters)
 
@@ -75,23 +87,37 @@ def containsKeywords(string, keywords):
 	return True
 
 def removeDuplicatePresenters(presenters): #change to dictionary 
-	finalpresenters = []
+	presenterslist = []
 	for k in presenters:
+		presenterslist.append((k, presenters[k]))
+	# finalpresenters = []
+	# print(presenterslist)
+	l = len(presenterslist)
+	i = 0
+	while i < l:
 		subset = False
-		for kk in presenters:
-			if not k == kk:
-				if k in kk:
+		j = 0
+		# print("i", i, presenterslist[i])
+		while j < l:
+			# print ("j",j, presenterslist[j])
+			if not i == j and i < l:
+				if presenterslist[i][0] in presenterslist[j][0]:
 					subset = True
-					presenters[kk] = presenters[kk] + presenters[k]
-		if not subset:
-			finalpresenters.append((k, presenters[k]))
-	return finalpresenters
+					presenterslist[j] = (presenterslist[j][0], presenterslist[j][1] + presenterslist[i][1])
+					l = l - 1
+					presenterslist.pop(i)
+					# print("i", i, presenterslist[i])
+					j = -1
+			j = j + 1
+		i = i + 1 
+	# print(presenterslist)
+	return presenterslist
 
 # class award(object):
 # 	name = ""
 # 	regex = ""
 # 	awardtype = ""
-
+"""
 awards = ['Best Motion Picture(.*)Drama',
 'Best Actress(.*)Motion Picture(.*)Drama',
 'Best Actor(.*)Motion Picture(.*)Musical(.*)Comedy',
@@ -118,6 +144,6 @@ awards = ['Best Motion Picture(.*)Drama',
 'Best Foreign Language Film',
 'Best (TV|Television) Series(.*)Musical(.*)Comedy',
 'Best Actor(.*)(TV|Television) Series(.*)Musical(.*)Comedy']
-
+"""
 # for a in config.awardarray:
 # 	print (findTweetsWithAwardName(data, a))

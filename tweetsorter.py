@@ -36,6 +36,7 @@ def sortTweets(data, awards):
 				awarddict[award.name].append(data[i])
 	for k in awarddict:
 		print(k, len(awarddict[k]))
+	return awarddict
 
 
 def regexCheck(tweet, award):
@@ -68,27 +69,13 @@ def keywordCheck(tweet, award):
 	return found
 
 
+d = sortTweets(data, config.awardarray)
 
-sortTweets(data, config.awardarray)
+# a1 = config.awardarray[0]
+# print(awards.findTweetsWithAwardName(a1,d[a1.name]))
+for award in config.awardarray:
+	print(awards.findTweetsWithAwardName(award,d[award.name]))
+# for i in range(0,len(data)):
+# 	if "presented by" in data[i]:
+# 		print(data[i])
 
-
-def findTweetsWithAwardName(data, a):
-	awardname = a.regex
-	friendlyname= a.name
-	
-	keystrings = []
-	presenters = []
-	stringList = []
-	found = False
-	for i in range(0,len(data)):
-		for r in awardname:	
-			x = []
-			found = False
-			x = re.findall(r, data[i], flags=re.IGNORECASE)
-			if x:
-				found = True
-				break
-		if found and "present" in data[i]:
-			stringList.append(data[i])
-	presenters = getPresenters(stringList, friendlyname)
-	return presenters
