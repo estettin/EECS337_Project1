@@ -73,8 +73,8 @@ d = sortTweets(data, config.awardarray)
 
 # a1 = config.awardarray[0]
 # print(awards.findTweetsWithAwardName(a1,d[a1.name]))
-for award in config.awardarray:
-	print(awards.findTweetsWithAwardName(award,d[award.name]))
+# for award in config.awardarray:
+	# print(awards.findTweetsWithAwardName(award,d[award.name]))
 # for i in range(0,len(data)):
 # 	if "presented by" in data[i]:
 # 		print(data[i])
