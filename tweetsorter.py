@@ -34,8 +34,9 @@ def sortTweets(data, awards):
 				found = keywordCheck(data[i],award)
 			if found:
 				awarddict[award.name].append(data[i])
-	for k in awarddict:
-		print(k, len(awarddict[k]))
+	# for k in awarddict:
+	# 	print(k, len(awarddict[k]))
+	print("Tweet Preprocessing Complete")
 	return awarddict
 
 
