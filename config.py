@@ -53,7 +53,7 @@ award6.regex = ["Best Director(.*)Motion Picture", "Best Director"]
 award6.must = ["best director"]
 award6.mustnot = ["actor", "actress", "television", "tv", "series"]
 award6.ors = []
-award6.awardtype = "movie"
+award6.awardtype = "person"
 
 award7 = award()
 award7.name = "best mini-series or motion picture made for television"

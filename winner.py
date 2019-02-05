@@ -25,7 +25,7 @@ def findWinner(a, tweets):
 		# 	print(x)
 		#get rid of cast and crew and words with 2 capitals
 		y = re.findall("(\".*\") wins best",t, re.IGNORECASE)
-		if y:
+		if y and "best" not in y[0].lower():
 			potentialtitle = re.sub(r'[^\w\s]','',y[0])
 			# print(potentialtitle)
 			movies = ia.search_movie(potentialtitle)
@@ -48,7 +48,6 @@ def findWinner(a, tweets):
 		w = re.findall("goes to (\".*\")",t, re.IGNORECASE)
 		if w: # and "goldenglobes" not in w[0].lower() and "golden globes" not in w[0].lower():
 			#remove quotes and punctuation 
-			print("HERE!")
 			potentialtitle = re.sub(r'[^\w\s]','',w[0])
 			# print(potentialtitle)
 			movies = ia.search_movie(potentialtitle)
@@ -66,17 +65,27 @@ def findWinner(a, tweets):
 				else:
 					dict2[title] = 1
 
-	print(a.name, dict1)
-	print(a.name, dict2)
-	print(a.name, wdict)
+	# print(a.name, dict1)
+	# print(a.name, dict2)
+	# print(a.name, wdict)
+	winner = determineWinner(wdict)
+	print (winner)
+	return winner
 
-			#First word check and check year
+#First word check and check year
 
 # get rid of punctuation
 # get rid of stop words
 
 
-
+def determineWinner(d):
+	maxkey = ""
+	maxval = -1
+	for k in d:
+		if d[k] > maxval:
+			maxval = d[k]
+			maxkey = k
+	return maxkey.lower()
 
 
 a = config.awardarray[:10]
