@@ -7,6 +7,7 @@ import re
 from populate_db import tweets2013
 import spacy
 import csv
+from random import sample
 
 with open('csvs/tweets2013.csv', 'r') as f:
   	reader = csv.reader(f)
@@ -60,7 +61,7 @@ def FindAwards(data):
 	return phrases
 
 	
-x = FindAwards(tweets[0:50000])
+x = FindAwards(sample(tweets,10000))
 
 
 
