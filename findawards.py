@@ -6,8 +6,12 @@ from nltk.tokenize import word_tokenize
 import re
 from populate_db import tweets2013
 import spacy
+import csv
 
-tweets = tweets2013
+with open('csvs/tweets2013.csv', 'r') as f:
+  	reader = csv.reader(f)
+  	tweets = list(reader)	
+  	
 punc = [".",":","!","?","#"]
 lhs = ["wins", "Wins", "for", "wins" "#goldenglobe" "golden globe" "Golden Globe"]
 rhs = ["goes", ""]
