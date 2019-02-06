@@ -3,7 +3,7 @@ import nltk
 from pprint import pprint
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize
-from populate_db import tweets2013 #, tweets2015
+from populate_db import  tweets2015, tweets2013
 
 
 """ Gets the name(s) of the host(s) given a set of tweets """
@@ -14,8 +14,8 @@ def getHost(tweets=None):
 	keystrings = []
 
 	stops = set(stopwords.words('english'))
-	stops.update(["host","hosts","hosting","goldenglobes", "golden", "globes", "rt", "http"])
-
+	stops.update(["host","hosts","hosting","goldenglobes", "golden", "globes", "rt", "http", "next", "year"])
+	print("starting to find hosts")
 	for i in range(0,len(tweets)):
 		if "host" in tweets[i]:
 			string = ''.join([i if ord(i) < 128 else '' for i in tweets[i]])
@@ -64,5 +64,4 @@ def getHost(tweets=None):
 			hosts.append(k[0].capitalize() + " " + k[1].capitalize())
 
 	return hosts
-
 
