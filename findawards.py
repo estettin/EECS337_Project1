@@ -14,9 +14,9 @@ with open('tweets2013.csv', 'r') as f:
   	tweets2013 = list(reader)[0]
   
 
-punc = [".",":","!","?","#","-", ",","<"]
-lhs = ["wins", "Wins", "for", "wins" "#goldenglobe" "golden globe" "Golden Globe"]
-rhs = ["goes", ""]
+punc = [".",":","!","?","#","-",",","<"]
+lhs = ["wins", "Wins", "for", "#goldenglobe" "golden globe" "Golden Globe"]
+rhs = ["goes", "for", "to", "dressed"]
 
 """
 Phrases to look for:
@@ -44,9 +44,11 @@ def FindAwards(data):
 		# print(tweet_arr)
 
 		end = 0
-		for i in range(len(tweet_arr)):
-			if tweet_arr[i] in punc:
+		for i in range(1,len(tweet_arr)):
+			if tweet_arr[i] in punc or tweet_arr[i] in rhs:
 				end = i
+				if end <= 1:
+					break
 				p = " ".join(tweet_arr[0:end]).lower()
 				if p in phrases.keys():
 					phrases[p] += 1
@@ -56,7 +58,7 @@ def FindAwards(data):
 
 		
 
-	pprint(phrases.keys())
+	# pprint(phrases.keys())
 	s = [{k: phrases[k]} for k in sorted(phrases, key=phrases.get, reverse=True)]
 	
 	# for k in list(s[0].keys())[:50]:
