@@ -14,7 +14,7 @@ with open('tweets2013.csv', 'r') as f:
   	tweets2013 = list(reader)[0]
   
 
-punc = [".",":","!","?","#"]
+punc = [".",":","!","?","#","-", ",","<"]
 lhs = ["wins", "Wins", "for", "wins" "#goldenglobe" "golden globe" "Golden Globe"]
 rhs = ["goes", ""]
 
@@ -24,6 +24,7 @@ wins _______ for
 the award for
 wins
 """
+
 
 def FindAwards(data):
 	"""
@@ -37,37 +38,30 @@ def FindAwards(data):
 		if match == None:
 			continue
 
-		print(match.string)
+		# print(match.string)
+		tweet_arr = re.findall(r"[\w']+|[.:,!?\#-]", tweet[match.start():])
+		tweet_arr = list(filter(None, tweet_arr))
+		# print(tweet_arr)
 
+		end = 0
+		for i in range(len(tweet_arr)):
+			if tweet_arr[i] in punc:
+				end = i
+				p = " ".join(tweet_arr[0:end]).lower()
+				if p in phrases.keys():
+					phrases[p] += 1
+				else:
+					phrases[p] = 1
+				break
 
-		"""if tweet[0:2] == "RT":
-									continue
-								if " best " in tweet.lower():
-									s = ""
-									doc = nlp(tweet)
-									flag = False
-									for element in doc:
-										if element.text.lower() == "best": #found the word best
-											flag = True
-										if (element.text in punc or element.pos_ == "VERB" or element.pos_ == "ADP") and flag:
-											#if the word is a punction, verb, or adposition ("for"), stop
-											break
-										if flag and element.text != ",":
-											#if we have seen the word best, add the word to the string
-											s = s + element.text.lower()
-									if s != "best":
-											#add to the dictionary
-										if s in phrases:
-											phrases[s] += 1
-										else:
-											phrases[s] = 1
-						
-							#remove keys that have only one occurance - these are most likely insignificant
-							k = list(phrases.keys()).copy()
-							for key in k:
-								if phrases[key] <= 3:
-									del phrases[key]
-							return phrases"""
+		
+
+	pprint(phrases.keys())
+	s = [{k: phrases[k]} for k in sorted(phrases, key=phrases.get, reverse=True)]
+	
+	for k in list(s[0].keys())[:25]:
+		pprint("%s: %s" % (k, s[0][k]))
+	pprint(s[:20])
 
 
 x = FindAwards(tweets2013[40000:50000])
