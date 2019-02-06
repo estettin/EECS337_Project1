@@ -66,7 +66,7 @@ def findWinner(a, tweets):
 					else:
 						dict2[title] = 1
 		winner = determineWinner(wdict)
-		print (winner)
+		print (a.name,": ", winner)
 		return winner
 	else:
 		stops = set(stopwords.words('english'))
@@ -76,26 +76,35 @@ def findWinner(a, tweets):
 		awardwords=[word for word in awardwords if word.isalpha()]
 		awardwords=[word.lower() for word in awardwords]
 		stops.update(awardwords) 
-		# stops.remove(u"and")
+		stops.remove(u"don")
+		keystrings = []
 		for t in tweets:
 			y = re.findall("(.*) wins best",t, re.IGNORECASE)
 			if y and not "best" in y[0]:
+				# print(y[0])
 				leftside = y[0]
 				leftside = ' '.join(word for word in leftside.split() if word[0]!='#' and not '@' in word and word[0]!='"')
 				tleftside = word_tokenize(leftside)
 				leftside = [word for word in tleftside if word.lower() not in stops]
-				leftside = ' '.join(leftside)
 				# print(leftside)
-				nlp = spacy.load('en_core_web_sm')
-				if leftside:
-					doc = nlp(leftside)
-					for ent in doc.ents:
-						if ent.label_ == "PERSON":
-							if ent.text in wdict:
-								wdict[ent.text] = wdict[ent.text] + 1
-							else:
-								wdict[ent.text] = 1
-		print (a.name, wdict)
+				leftside = ' '.join(leftside)
+
+				if not leftside in keystrings:
+					keystrings.append(leftside)
+				# print(leftside)
+		nlp = spacy.load('en_core_web_sm')
+		for s in keystrings:
+			doc = nlp(s)
+			for ent in doc.ents:
+				if ent.label_ == "PERSON":
+					if ent.text in wdict:
+						wdict[ent.text] = wdict[ent.text] + 1
+					else:
+						wdict[ent.text] = 1
+		# print(wdict)
+		winner = determineWinner(wdict) 
+		print (a.name, ": ", winner)
+		return winner
 	# print(a.name, dict1)
 	# print(a.name, dict2)
 	# print(a.name, wdict)
@@ -150,17 +159,5 @@ def removeDuplicatePresenters(presenters): #change to dictionary
 
 a = config.awardarray
 
-
-
 for award in a:
-	if not award.awardtype == "movie":
-		findWinner(award,d[award.name])
-		
-
-
-
-
-
-
-# for award in config.awardarray:
-# 	findWinner(award, d[award.name])
+	findWinner(award,d[award.name])
