@@ -88,6 +88,7 @@ def containsKeywords(string, keywords):
 
 def removeDuplicatePresenters(presenters): #change to dictionary 
 	presenterslist = []
+	d = {}
 	for k in presenters:
 		presenterslist.append((k, presenters[k]))
 	# finalpresenters = []
@@ -111,7 +112,9 @@ def removeDuplicatePresenters(presenters): #change to dictionary
 			j = j + 1
 		i = i + 1 
 	# print(presenterslist)
-	return presenterslist
+	for t in presenterslist:
+		d[t[0]] = t[1]
+	return d
 
 # class award(object):
 # 	name = ""
