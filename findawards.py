@@ -31,17 +31,22 @@ def FindAwards(data):
 			doc = nlp(tweet)
 			flag = False
 			for element in doc:
-				if element.text.lower() == "best":
+				if element.text.lower() == "best": #found the word best
 					flag = True
 				if (element.text in punc or element.pos_ == "VERB" or element.pos_ == "ADP") and flag:
+					#if the word is a punction, verb, or adposition ("for"), stop
 					break
 				if flag:
+					#if we have seen the word best, add the word to the string
 					s = s + element.text.lower() + " "
 			if s != "best":
+					#add to the dictionary
 				if s in phrases:
 					phrases[s] += 1
 				else:
 					phrases[s] = 1
+
+	#remove keys that have only one occurance - these are most likely insignificant
 	k = list(phrases.keys()).copy()
 	for key in k:
 		if phrases[key] <= 1:
