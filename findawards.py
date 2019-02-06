@@ -32,11 +32,11 @@ def FindAwards(data):
 	phrases = {}
 	nlp = spacy.load("en_core_web_sm")
 	for tweet in data:
-		if 
-		match = re.search("'best ' | 'Best '", tweet)
-		
-		if not match:
+		match = re.search("best\s|Best\s", tweet)
+		# print(match)
+		if match == None:
 			continue
+
 		print(match.string)
 
 
