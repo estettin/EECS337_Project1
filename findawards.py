@@ -59,12 +59,13 @@ def FindAwards(data):
 	pprint(phrases.keys())
 	s = [{k: phrases[k]} for k in sorted(phrases, key=phrases.get, reverse=True)]
 	
-	for k in list(s[0].keys())[:25]:
-		pprint("%s: %s" % (k, s[0][k]))
-	pprint(s[:20])
+	# for k in list(s[0].keys())[:50]:
+		# pprint("%s: %s" % (k, s[0][k]))
+
+	pprint(s[:50])
 
 
-x = FindAwards(tweets2013[40000:50000])
+x = FindAwards(tweets2013)
 
 
 			
