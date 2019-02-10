@@ -31,6 +31,6 @@ def getTweets(file_path, collection_name):
 
 
 # count 174643
-tweets2013 = getTweets('data/gg2013.json', 'gg2013')
+# tweets2013 = getTweets('data/gg2013.json', 'gg2013')
 # count 1754153
-# tweets2015 = getTweets('data/gg2015.json', 'gg2015')
+tweets2015 = getTweets('data/gg2015.json', 'gg2015')
