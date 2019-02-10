@@ -4,15 +4,29 @@ from pprint import pprint
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
 import re
-from populate_db import tweets2013#, tweets2015
 import spacy
 import config
-import awards
+# import awards
+import csv
+import random
 
-data = tweets2013
+data =[]
+with open('csvs/tweets2015.csv', 'r') as f:
+	reader = csv.reader(f)
+	data = list(reader)
+data=data[0]
+
+print("length: ", len(data))
+if len(data) > 400000:
+	random.shuffle(data)
+
+data = data[:400000]
+print(len(data))
+# data = tweets2013
 
 # return dictionary of tweets for each award
 def sortTweets(data, awards):
+	print("starting tweet sorting")
 	awarddict = {}
 	for a in awards:
 		awarddict[a.name] = []
@@ -35,7 +49,9 @@ def sortTweets(data, awards):
 			if found:
 				awarddict[award.name].append(data[i])
 	for k in awarddict:
-		print(k, len(awarddict[k]))
+	 	print(k, len(awarddict[k]))
+	print("Tweet Preprocessing Complete")
+	return awarddict
 
 
 def regexCheck(tweet, award):
@@ -68,27 +84,13 @@ def keywordCheck(tweet, award):
 	return found
 
 
+d = sortTweets(data, config.awardarray)
 
-sortTweets(data, config.awardarray)
+# a1 = config.awardarray[0]
+# print(awards.findTweetsWithAwardName(a1,d[a1.name]))
+# for award in config.awardarray:
+	# print(awards.findTweetsWithAwardName(award,d[award.name]))
+# for i in range(0,len(data)):
+# 	if "presented by" in data[i]:
+# 		print(data[i])
 
-
-def findTweetsWithAwardName(data, a):
-	awardname = a.regex
-	friendlyname= a.name
-	
-	keystrings = []
-	presenters = []
-	stringList = []
-	found = False
-	for i in range(0,len(data)):
-		for r in awardname:	
-			x = []
-			found = False
-			x = re.findall(r, data[i], flags=re.IGNORECASE)
-			if x:
-				found = True
-				break
-		if found and "present" in data[i]:
-			stringList.append(data[i])
-	presenters = getPresenters(stringList, friendlyname)
-	return presenters

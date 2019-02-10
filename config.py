@@ -53,7 +53,7 @@ award6.regex = ["Best Director(.*)Motion Picture", "Best Director"]
 award6.must = ["best director"]
 award6.mustnot = ["actor", "actress", "television", "tv", "series"]
 award6.ors = []
-award6.awardtype = "movie"
+award6.awardtype = "person"
 
 award7 = award()
 award7.name = "best mini-series or motion picture made for television"
@@ -212,6 +212,15 @@ award25.must = ["best", "actress", "supporting"]
 award25.mustnot = ["television", "tv", "actor"]
 award25.ors = []
 award25.awardtype = "person"
+
+award26 = award()
+award26.name = "cecil b. demille award"
+award26.regex = ["Cecil(.*)de(.*)award"]
+award26.must = []
+award26.mustnot = ["best"]
+award26.ors = ["cecil b demille award","cecil b. demille award","cecil b. de mille award", "cecil b de mille award"]
+award26.awardtype = "person"
+
 
 
 awardarray = [award1,award2,award3,award4,award5, award6,award7, award8, award9, award10, award11, award12, award13, award14,award15,award16,award17,award18,award19,award20,award21,award22,award23,award24,award25]
