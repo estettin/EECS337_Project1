@@ -4,6 +4,7 @@ from populate_db import tweets2013, getTweets
 from awards import *
 from results import *
 from sentiment import *
+from winner import *
 from pprint import pprint as pp
 import pandas as pd
 import json
@@ -18,6 +19,7 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import re
 import spacy
 
+
 """
 main file where we will call functions to find the 
 information requested and use the resulting values to populate
@@ -26,6 +28,8 @@ a Results object
 
 def getResults(file_path, year, award_names=[]):
 	tweets = getTweets(file_path, "gg" + str(year))
+	awards = config.awardarray
+	d = sortTweets(tweets, awards)
 	rc = getBestAndWorstDressed(tweets)
 	host = getHost(tweets)
 	sentiment = sentinmentOfPeople(host, tweets)
