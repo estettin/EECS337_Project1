@@ -10,7 +10,7 @@ import config
 import csv
 import random
 
-data =[]
+data = []
 
 def loadTweets(year):
 	# print("year: ", year)

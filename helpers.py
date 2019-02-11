@@ -6,18 +6,25 @@ from pandas.io.json import json_normalize
 import csv
 
 #creating preprocessed dictionaries into json
-def createDictionary(year):
-	d = tweetsorter.sortTweets(year, config.awardarray)
-	with open('dicts/d' + year + '.json', 'w') as fp:
-		json.dump(d, fp)
+# def createDictionary(year):
+# 	d = tweetsorter.sortTweets(year, config.awardarray)
+# 	with open('dicts/d' + year + '.json', 'w') as fp:
+# 		json.dump(d, fp)
 
 #loading preprocessed dictionaries from json
 def loadDictionary(year):
-	name = 'dicts/d' + year + '.json'
+	name = 'countDicts/d' + year + '.json'
 	return json.load(open(name))
-#loading all tweets from csv
-def loadData(year):
-	return tweetsorter.data
+
+def loadTweets(year):
+	# print("year: ", year)
+	name = 'csvs/tweets' + year + '.csv'
+	# print("name: ", name)
+	with open(name, 'r') as f:
+		reader = csv.reader(f)
+		data = list(reader)
+	data=data[0]
+	return data
 
 #create csv files with all the tweets
 def createCSV(year):
