@@ -12,6 +12,7 @@ import awards as pres
 import nominees as nom
 
 OFFICIAL_AWARDS = ['cecil b. demille award', 'best motion picture - drama', 'best performance by an actress in a motion picture - drama', 'best performance by an actor in a motion picture - drama', 'best motion picture - comedy or musical', 'best performance by an actress in a motion picture - comedy or musical', 'best performance by an actor in a motion picture - comedy or musical', 'best animated feature film', 'best foreign language film', 'best performance by an actress in a supporting role in a motion picture', 'best performance by an actor in a supporting role in a motion picture', 'best director - motion picture', 'best screenplay - motion picture', 'best original score - motion picture', 'best original song - motion picture', 'best television series - drama', 'best performance by an actress in a television series - drama', 'best performance by an actor in a television series - drama', 'best television series - comedy or musical', 'best performance by an actress in a television series - comedy or musical', 'best performance by an actor in a television series - comedy or musical', 'best mini-series or motion picture made for television', 'best performance by an actress in a mini-series or motion picture made for television', 'best performance by an actor in a mini-series or motion picture made for television', 'best performance by an actress in a supporting role in a series, mini-series or motion picture made for television', 'best performance by an actor in a supporting role in a series, mini-series or motion picture made for television']
+# put official awards in
 
 def get_hosts(year):
     '''Hosts is a list of one or more strings. Do NOT change the name
@@ -96,9 +97,9 @@ def pre_ceremony():
         print("Creating CSVs")
         helpers.createCSV(year)
         print("Finished creating CSVs")
-        print("Creating dictionary") 
-        helpers.createDictionary(year)
-        print("Finished creating dictionary")
+        print("Getting rid of RTs") 
+        helpers.removeRetweets(year)
+        print("Finished getting rid of RTs")
     print("Pre-ceremony processing complete.")
     return
 
@@ -109,7 +110,33 @@ def main():
     run when grading. Do NOT change the name of this function or
     what it returns.'''
     # Your code here
+    years = ["2013"]
+    for year in years:
+        tweets_dictionary = helpers.loadTweetsFromJson(year)
+        for tweet in tweets_dictionary:
+            
+        #for each tweet
+            #for each award
+                #check if its relevant (sort tweets)
+                #winner
+                #presenters
+                #nominees
+        # process winners for each award
+        # process presenters for each award
+        # process nominees for each award
+        # human print
+    
+
     return
 
 if __name__ == '__main__':
     main()
+
+
+
+
+
+
+
+
+

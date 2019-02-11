@@ -4,6 +4,8 @@ import json
 import pandas as pd
 from pandas.io.json import json_normalize
 import csv
+from collections import Counter
+import re
 
 #creating preprocessed dictionaries into json
 # def createDictionary(year):
@@ -11,8 +13,25 @@ import csv
 # 	with open('dicts/d' + year + '.json', 'w') as fp:
 # 		json.dump(d, fp)
 
+def removeRetweets(year):
+	data = helpers.loadTweets(year)
+	tweets = Counter()
+	for t in data:
+		r = re.findall("RT(?:.*): (.*)", t)
+		if r:
+			tweets[r[0]] += 1
+		else:
+			tweets[t] += 1
+
+	# print (tweets.most_common(100))
+	# print(len(tweets))
+
+	with open('countDicts/d' + year + '.json', 'w') as fp:
+			json.dump(tweets, fp)
+
+
 #loading preprocessed dictionaries from json
-def loadDictionary(year):
+def loadTweetsFromJson(year):
 	name = 'countDicts/d' + year + '.json'
 	return json.load(open(name))
 
@@ -36,3 +55,4 @@ def createCSV(year):
 	with open(name2,'w') as resultFile:
 		wr = csv.writer(resultFile, quoting=csv.QUOTE_ALL)
 		wr.writerow(tweets2013)
+

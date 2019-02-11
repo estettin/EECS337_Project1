@@ -8,8 +8,6 @@ from nltk.tokenize import word_tokenize
 
 """ Gets the name(s) of the host(s) given a set of tweets """
 def getHost(tweets):
-	
-
 	keystrings = []
 
 	stops = set(stopwords.words('english'))
