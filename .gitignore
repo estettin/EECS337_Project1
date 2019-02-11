@@ -1,7 +1,15 @@
-
+__pycache__/
 data/gg2015.json
 data/gg2013.json
+<<<<<<< HEAD
 .idea/
 __pycache__/
 tweets2013.csv
 tweets2015.csv
+=======
+./.idea/
+./__pycache__/
+csvs/tweets2013.csv
+csvs/tweets2015.csv
+dicts/
+>>>>>>> 67ecaa0e6c927e0734143a4d83f3f97708b2aa71
