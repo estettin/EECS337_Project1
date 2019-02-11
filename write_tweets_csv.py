@@ -19,3 +19,14 @@ with open("csvs/tweets2013.csv",'w') as resultFile:
 with open("csvs/tweets2015.csv",'w') as resultFile:
    wr = csv.writer(resultFile, quoting=csv.QUOTE_ALL)
    wr.writerow(tweets2015)
+
+""" 
+file = open("data/gg____.json", 'r')
+data_json = json.loads(file.read())
+tweets2015 = pd.DataFrame(json_normalize(data_json)).get("text").tolist()
+
+with open("csvs/tweets____.csv",'w') as resultFile:
+    wr = csv.writer(resultFile, quoting=csv.QUOTE_ALL)
+    wr.writerow(tweets____)
+
+"""

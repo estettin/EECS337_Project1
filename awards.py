@@ -4,17 +4,12 @@ from pprint import pprint
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
 import re
-# from populate_db import tweets2013 #, tweets2015
 import spacy
 import config
 import tweetsorter
 from collections import Counter
 
-# data = tweets2013
-
-d = tweetsorter.d
-
-def findTweetsWithAwardName(a, tweets):
+def findPresenters(a, tweets):
 	presenters = []
 	finaltweets = []
 	bytweets = []
@@ -51,17 +46,11 @@ def findTweetsWithAwardName(a, tweets):
 				possnames[name] += 1
 					# print(e)
 					# possnames.append()
-	print(a.name)
-	print(possnames)
-	# print("Len of pb: ", len(bytweets))
-	# print("Len of p: ", len(finaltweets))
-	# presenters = getPresenters(finaltweets, bytweets, a.name)
-	# return presenters
-
-  
-	# if len(presenters) > 0:
-	# 	print ("Award:", friendlyname)
-	# 	print("Presenters", presenters)
+	pres = possnames.most_common(3)
+	finalpresenters = []
+	for p in pres:
+		finalpresenters.append(p[0])
+	return finalpresenters
 
 def getNames(tweet, award):
 	names = []
@@ -76,7 +65,7 @@ def getNames(tweet, award):
 			#process presenters (change to dictionary)
 	return names
 
-# removeDuplicatePresenters(presenters)
+
 
 
 def removeDuplicatePresenters(presenters): #change to dictionary 
@@ -134,7 +123,3 @@ def cleanTweet(t, award):
 	tweet = word_tokenize(tweet)
 	tweet = [word for word in tweet if word.lower() not in stops]
 	return " ".join(tweet)
-
-
-for a in config.awardarray:
-	print (findTweetsWithAwardName(a, d[a.name]))

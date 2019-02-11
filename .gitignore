@@ -5,3 +5,4 @@ data/gg2013.json
 ./__pycache__/
 csvs/tweets2013.csv
 csvs/tweets2015.csv
+dicts/

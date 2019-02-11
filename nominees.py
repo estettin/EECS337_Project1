@@ -4,21 +4,15 @@ from pprint import pprint
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
 import re
-# from populate_db import tweets2013#, tweets2015
 import spacy
 import config
-import tweetsorter
 from imdb import IMDb
 ia = IMDb()
 import string 
 from collections import Counter
 
 
-d = tweetsorter.d
-
 def findNominees(a, tweets):
-	print("starting to find nominees")
-	print(a.name)
 	keystrings = Counter()
 	ndict = Counter()
 	# takes too long
@@ -69,7 +63,11 @@ def findNominees(a, tweets):
 			keystrings[cleanTweet(n[0][1],a)] += 1
 	# print(keystrings)
 	ndict = nomineesCounter(keystrings,a)	
-	return ndict
+	nominees = ndict.most_common(10)
+	finalnominees = []
+	for n in nominees:
+		finalnominees.append(n[0])
+	return finalnominees
 
 def nomineesCounter(c,a):
 	atype = a.awardtype
@@ -122,9 +120,6 @@ def cleanTweet(t, award):
 	tweet = [word for word in tweet if word.lower() not in stops]
 	return " ".join(tweet)
 
-awards = config.awardarray
-for a in awards:
-	print(findNominees(a,d[a.name]))
 
 # "(didn\'t win)|(doesn\'t win)|(deserves to win)|(deserved to win)|(better win)|(is nominated for)|(was nominated for)", re.IGNORECASE)
 

@@ -223,7 +223,7 @@ award26.awardtype = "person"
 
 
 
-awardarray = [award1,award2,award3,award4,award5, award6,award7, award8, award9, award10, award11, award12, award13, award14,award15,award16,award17,award18,award19,award20,award21,award22,award23,award24,award25]
+awardarray = [award1,award2,award3,award4,award5, award6,award7, award8, award9, award10, award11, award12, award13, award14,award15,award16,award17,award18,award19,award20,award21,award22,award23,award24,award25,award26]
 
 
 

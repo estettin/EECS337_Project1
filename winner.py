@@ -4,19 +4,15 @@ from pprint import pprint
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
 import re
-# from populate_db import tweets2013 #tweets2015
 import spacy
 import config
-import tweetsorter
 from imdb import IMDb
 ia = IMDb()
 import string 
-
-# data = tweets2013
-d = tweetsorter.d
+import helpers
 
 def findWinner(a, tweets):
-	print("starting to find winner")
+	# print("starting to find winner")
 	wdict = {}
 	dict1 = {}
 	dict2 = {}
@@ -67,7 +63,7 @@ def findWinner(a, tweets):
 					else:
 						dict2[title] = 1
 		winner = determineWinner(wdict)
-		print (a.name,": ", winner)
+		# print (a.name,": ", winner)
 		return winner
 	else:
 		stops = set(stopwords.words('english'))
@@ -104,7 +100,7 @@ def findWinner(a, tweets):
 						wdict[ent.text] = 1
 		# print(wdict)
 		winner = determineWinner(wdict) 
-		print (a.name, ": ", winner)
+		# print (a.name, ": ", winner)
 		return winner
 	# print(a.name, dict1)
 	# print(a.name, dict2)
@@ -155,10 +151,3 @@ def removeDuplicatePresenters(presenters): #change to dictionary
 	for t in presenterslist:
 		d[t[0]] = t[1]
 	return d
-
-
-
-a = config.awardarray
-
-for award in a:
-	findWinner(award,d[award.name])

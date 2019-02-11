@@ -11,22 +11,33 @@ import csv
 import random
 
 data =[]
-with open('csvs/tweets2015.csv', 'r') as f:
-	reader = csv.reader(f)
-	data = list(reader)
-data=data[0]
 
-print("length: ", len(data))
-if len(data) > 400000:
-	random.shuffle(data)
+def loadTweets(year):
+	# print("year: ", year)
+	name = 'csvs/tweets' + year + '.csv'
+	# print("name: ", name)
+	with open(name, 'r') as f:
+		reader = csv.reader(f)
+		data = list(reader)
+	data=data[0]
 
-data = data[:400000]
-print(len(data))
+	# print("length: ", len(data))
+	if len(data) > 400000:
+		random.shuffle(data)
+
+	data = data[:400000]
+	return data
+
+
 # data = tweets2013
 
+
+
+
 # return dictionary of tweets for each award
-def sortTweets(data, awards):
-	print("starting tweet sorting")
+def sortTweets(year, awards):
+	data = loadTweets(year)
+	# print("starting tweet sorting")
 	awarddict = {}
 	for a in awards:
 		awarddict[a.name] = []
@@ -48,9 +59,9 @@ def sortTweets(data, awards):
 				found = keywordCheck(data[i],award)
 			if found:
 				awarddict[award.name].append(data[i])
-	for k in awarddict:
-	 	print(k, len(awarddict[k]))
-	print("Tweet Preprocessing Complete")
+	# for k in awarddict:
+	 	# print(k, len(awarddict[k]))
+	# print("Tweet Preprocessing Complete")
 	return awarddict
 
 
@@ -84,7 +95,7 @@ def keywordCheck(tweet, award):
 	return found
 
 
-d = sortTweets(data, config.awardarray)
+# d = sortTweets(data, config.awardarray)
 
 # a1 = config.awardarray[0]
 # print(awards.findTweetsWithAwardName(a1,d[a1.name]))
