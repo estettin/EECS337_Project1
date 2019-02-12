@@ -17,7 +17,6 @@ with open('tweets2013.csv', 'r', encoding = "utf-8") as f:
   	tweets2015 = list(reader)[0]
 
 punc = [".",":","!","?","#",",","<", "@"]
-lhs = ["wins", "Wins", "for"]
 rhs = ["wins", "Wins", "for", "goes", "to", "dressed", "Goes", "winner", "Winner", "at"]
 
 def FindAwards(data):
