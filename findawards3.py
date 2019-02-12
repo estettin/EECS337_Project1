@@ -16,17 +16,9 @@ with open('tweets2013.csv', 'r', encoding = "utf-8") as f:
   	reader = csv.reader(f)
   	tweets2015 = list(reader)[0]
 
-
-punc = [".",":","!","?","#",",","<"]
+punc = [".",":","!","?","#",",","<", "@"]
 lhs = ["wins", "Wins", "for"]
 rhs = ["wins", "Wins", "for", "goes", "to", "dressed", "Goes", "winner", "Winner", "at"]
-
-"""
-Phrases to look for:
-wins _______ for
-the award for
-wins
-"""
 
 def FindAwards(data):
 	"""
@@ -83,16 +75,18 @@ def FindAwards(data):
 			s_reduced[key] += [v for v in d.values()][0]
 		else:
 			s_reduced[key] =  [v for v in d.values()][0]
-	print(len(s_reduced))
-	final = [{k: s_reduced[k]} for k in sorted(s_reduced, key=s_reduced.get, reverse=True)]
 
-	maxcount = [v for v in final[0].values()][0]
+	final_list = [{k: s_reduced[k]} for k in sorted(s_reduced, key=s_reduced.get, reverse=True)]
+	
+	maxcount = [v for v in final_list[0].values()][0]
 	awardslist = []
-	for a in final:
+	for a in final_list:
 		if [v for v in a.values()][0] >= .1*maxcount:
 			awardslist.append(a)
-	pprint(awardslist)
+	awardslist = [[v.title() for v in d.keys()][0] for d in awardslist]
 
+
+	pprint(awardslist)
 
 #random.shuffle(tweets2015)
 x = FindAwards(tweets2015)
