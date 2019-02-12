@@ -55,12 +55,13 @@ def FindAwards(data, num_awards):
 			if tweet_arr[i] == "-" and not found_hyph:
 				found_hyph = True
 				if i+1 >= len(tweet_arr):
-					continue
-				tok_arr = nltk.word_tokenize(' '.join([j for j in tweet_arr[i+1:i+3]]))
+					tok_arr = nltk.word_tokenize(' '.join([j for j in tweet_arr[i:]]))
+				else:
+					tok_arr = nltk.word_tokenize(' '.join([j for j in tweet_arr[i+1:i+3]]))
 				tagged = nltk.pos_tag(tok_arr)
 				tree = nltk.chunk.ne_chunk(tagged)
 				iob_tagged = tree2conlltags(tree)
-				if iob_tagged != [] and ('PERSON' not in iob_tagged[0][2]):
+				if iob_tagged != [] and 'PERSON' not in iob_tagged[0][2]:
 					# print(iob_tagged)
 					continue
 
