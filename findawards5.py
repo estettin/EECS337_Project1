@@ -11,6 +11,7 @@ import csv
 from random import sample
 import operator
 import copy
+from nltk.chunk import conlltags2tree, tree2conlltags
 
 
 with open('tweets2015.csv', 'r') as f:
@@ -21,7 +22,7 @@ with open('tweets2015.csv', 'r') as f:
 punc = [".",":","!","?","#",",","<"]
 lhs = ["wins", "Wins", "for"]
 rhs = ["wins", "Wins", "for", "goes", "to", "dressed", "Goes", "winner", "Winner", "at"]
-search_keys = ["best", "award for"]
+search_keys = ["best"]
 
 """
 Phrases to look for:
@@ -38,7 +39,7 @@ def FindAwards(data, num_awards):
 
 	# nlp = spacy.load("en_core_web_sm")
 	for tweet in data:
-		match = re.search(''.join(term.lower()+ "\s|" + term.upper() + "\s|" + term.title() + "\s|" + term.capitalize() + "\s" for term in search_keys), tweet)
+		match = re.search(r'Best\s|BEST\s|best\s', tweet)
 		# print(match)
 		if match == None:
 			continue
@@ -53,7 +54,17 @@ def FindAwards(data, num_awards):
 		for i in range(1,len(tweet_arr)):
 			if tweet_arr[i] == "-" and not found_hyph:
 				found_hyph = True
-			elif tweet_arr[i] in punc or (tweet_arr[i] in rhs) or (found_hyph and tweet_arr[i] == "-"):
+				if i+1 >= len(tweet_arr):
+					continue
+				tok_arr = nltk.word_tokenize(' '.join([j for j in tweet_arr[i+1:i+3]]))
+				tagged = nltk.pos_tag(tok_arr)
+				tree = nltk.chunk.ne_chunk(tagged)
+				iob_tagged = tree2conlltags(tree)
+				if iob_tagged != [] and ('PERSON' not in iob_tagged[0][2]):# and ('ORGANIZATION' not in iob_tagged[0][2]):#and ('LOCATION' not in iob_tagged[0][2]):
+					# print(iob_tagged)
+					continue
+
+			if tweet_arr[i] in punc or (tweet_arr[i] in rhs) or (found_hyph and tweet_arr[i] == "-"):
 				end = i
 				if end <= 1:
 					break
@@ -70,7 +81,7 @@ def FindAwards(data, num_awards):
 
 	s = [{k: phrases[k]} for k in sorted(phrases, key=phrases.get, reverse=True)]
 	thresh = [v for k,v in s[1000].items()][0]
-	sorted_phrases = {k: v for k, v in phrases.items() if v > thresh}
+	sorted_phrases = {k: v for k, v in s[0].items() if v > thresh}
 
 	
 	# sorted_phrases = s[0]
@@ -79,27 +90,27 @@ def FindAwards(data, num_awards):
 
 	sorted_phrases2 = {}
 	for k in sorted_phrases.keys():
-		st = nltk.word_tokenize(k)
-		tagged = nltk.pos_tag(st)
+		# st = nltk.word_tokenize(k)
+		# tagged = nltk.pos_tag(st)
 		# print(tagged)
 
 		# entities = nltk.chunk.ne_chunk(tagged)
 		# print(entities)
 		# pprint(entities)
-		new_p =""
-		# print(k)
-		for chunk in tagged:
-			if chunk[1] == 'PERSON':
-				break
-			if chunk[1] == ':':
-				new_p = new_p + chunk[0] + ' '
-			else:
-				print(chunk[0])
-				new_p = new_p + ' ' + chunk[0]
+		new_p = k
+		# # print(k)
+		# for chunk in tagged:
+		# 	if chunk[1] == 'PERSON':
+		# 		break
+		# 	if chunk[1] == ':':
+		# 		new_p = new_p + chunk[0] + ' '
+		# 	else:
+		# 		print(chunk[0])
+		# 		new_p = new_p + ' ' + chunk[0]
 
 
 				# print(ent, new_p)
-		print(new_p)
+		# print(new_p)
 
 		# print(new_p)
 		if new_p == '':
@@ -119,11 +130,11 @@ def FindAwards(data, num_awards):
 	dup = copy.deepcopy(sorted_phrases2)
 
 	
-	for k,v in dup.items():
-		for phrase in dup.keys():
-			if k in phrase and k != phrase:
-				del sorted_phrases2[k]
-				break
+	# for k,v in dup.items():
+	# 	for phrase in dup.keys():
+	# 		if k in phrase and k != phrase:
+	# 			del sorted_phrases2[k]
+	# 			break
 				
 				
 
@@ -131,8 +142,8 @@ def FindAwards(data, num_awards):
 	# pprint(phrases.keys())
 	
 	s2 = [{k: sorted_phrases2[k]} for k in sorted(sorted_phrases2, key=sorted_phrases2.get, reverse=True)]
-	for k in list(s[0].keys())[:50]:
-		pprint("%s: %s" % (k, s[0][k]))
+	# for k in list(s[0].keys())[:50]:
+	# 	pprint("%s: %s" % (k, s[0][k]))
 	# print(sorted_phrases2)
 	pprint(s2[:num_awards])
 

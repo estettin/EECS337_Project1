@@ -19,7 +19,8 @@ with open('tweets2013.csv', 'r', encoding = "utf-8") as f:
 
 punc = [".",":","!","?","#",",","<"]
 lhs = ["wins", "Wins", "for"]
-rhs = ["wins", "Wins", "for", "goes", "to", "dressed", "Goes", "winner", "Winner", "at"]
+rhs = ["wins", "Wins", "for", "goes", "to", "Goes", "winner", "Winner", "at"]
+search_keys = ["best", "award for"]
 
 """
 Phrases to look for:
@@ -35,7 +36,7 @@ def FindAwards(data):
 	phrases = {}
 	nlp = spacy.load("en_core_web_sm")
 	for tweet in data:
-		match = re.search("best\s|Best\s", tweet)
+		match = re.search(''.join(term.lower()+ "\s|" + term.upper() + "\s|" + term.title() + "\s|" + term.capitalize() + "\s" for term in search_keys), tweet)
 		# print(match)
 		if match == None:
 			continue

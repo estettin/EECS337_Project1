@@ -19,8 +19,8 @@ with open('tweets2013.csv', 'r', encoding = "utf-8") as f:
 
 punc = [".",":","!","?","#",",","<"]
 lhs = ["wins", "Wins", "for"]
-rhs = ["wins", "Wins", "for", "goes", "to", "dressed", "Goes", "winner", "Winner", "at"]
-
+rhs = ["wins", "Wins", "for", "goes", "to", "Goes", "winner", "Winner", "at"]
+search_keys = ["best", "award for"]
 """
 Phrases to look for:
 wins _______ for
@@ -28,14 +28,14 @@ the award for
 wins
 """
 
-def FindAwards(data):
+def FindAwards(data, num_awards):
 	"""
 	takes in the tweets as an an array of string and identifies award names
 	"""
 	phrases = {}
 	nlp = spacy.load("en_core_web_sm")
 	for tweet in data:
-		match = re.search("best\s|Best\s", tweet)
+		match = re.search(''.join(term.lower()+ "\s|" + term.upper() + "\s|" + term.title() + "\s|" + term.capitalize() + "\s" for term in search_keys), tweet)
 		# print(match)
 		if match == None:
 			continue
@@ -121,6 +121,7 @@ def FindAwards(data):
 		if [v for v in a.values()][0] >= .25*maxcount:
 			awardslist.append(a)
 	pprint(awardslist)
+	pprint(len(awardslist))
 
 # random.shuffle(tweets2015)
-x = FindAwards(tweets2015)
+x = FindAwards(tweets2015, 26)
