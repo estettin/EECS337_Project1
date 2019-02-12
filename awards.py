@@ -9,48 +9,54 @@ import config
 import tweetsorter
 from collections import Counter
 
-def findPresenters(a, tweets):
+def findPresenters(a, t, possnames, count):
 	presenters = []
 	finaltweets = []
 	bytweets = []
-	possnames = Counter()
-	for t in tweets:
-		# if "presented by" in t:
-		# 	bytweets.append(t)
-		# if "present" in t:
-		# 	finaltweets.append(t)
-		# r = re.findall("(.*)and(.*)present(?:s|ed|ing)", t, re.IGNORECASE)
-		ha = re.findall("(.*)present(?:s|ed|ing)", t, re.IGNORECASE)
-		if ha:
-			h1 = re.findall("([#@](?:[A-Z][a-z]*)(?:[A-Z][a-z]+))",t)
-			if h1:
-				for e in h1:
-					e = cleanTweet(e,a)
-					if " " in e:
-						possnames[e] += 1
-			h2 = re.findall("((?:[A-Z][-A-Za-z]*)(?:\s[A-Z][-A-Za-z]+))", ha[0])
-			if h2: 
-				for e in h2:
-					e = cleanTweet(e,a)
-					if " " in e:
-						possnames[e] += 1
-			morenames = getNames(ha[0],a)
-			for name in morenames:
-				possnames[name] += 1
-					# print(e)
-					# possnames.append()
-		ha2 = re.findall(" presented by (.*)", t, re.IGNORECASE)
-		if ha2:
-			morenames = getNames(cleanTweet(ha2[0],a),a)
-			for name in morenames:
-				possnames[name] += 1
-					# print(e)
-					# possnames.append()
-	pres = possnames.most_common(3)
-	finalpresenters = []
-	for p in pres:
-		finalpresenters.append(p[0])
-	return finalpresenters
+	nickname = {}
+	nickname["J Lo"] = "Jennifer Lopez"
+	nickname["Lo"] = "Jennifer Lopez"
+	nickname["Arnold"] = "Arnold Schwarzenegger"
+	# if "presented by" in t:
+	# 	bytweets.append(t)
+	# if "present" in t:
+	# 	finaltweets.append(t)
+	# r = re.findall("(.*)and(.*)present(?:s|ed|ing)", t, re.IGNORECASE)
+	ha = re.findall("(.*)present(?:s|ed|ing)", t, re.IGNORECASE)
+	if ha:
+		h1 = re.findall("([#@](?:[A-Z][a-z]*)(?:[A-Z][a-z]+))",ha[0])
+		if h1:
+			for e in h1:
+				e = cleanTweet(e,a)
+				if e in nickname:
+					e = nickname[e]
+				if " " in e:
+					possnames[e] += count
+		h2 = re.findall("((?:[A-Z][-A-Za-z]*)(?:\s[A-Z][-A-Za-z]+))", ha[0])
+		if h2: 
+			for e in h2:
+				e = cleanTweet(e,a)
+				if e in nickname:
+					e = nickname[e]
+				if " " in e:
+					possnames[e] += count
+		morenames = getNames(ha[0],a)
+		for name in morenames:
+			if name in nickname:
+					name = nickname[name]
+			possnames[name] += count
+				# print(e)
+				# possnames.append()
+	ha2 = re.findall(" presented by (.*)", t, re.IGNORECASE)
+	if ha2:
+		morenames = getNames(cleanTweet(ha2[0],a),a)
+		for name in morenames:
+			if name in nickname:
+				name = nickname[name]
+			possnames[name] += count
+				# print(e)
+				# possnames.append()
+	return
 
 def getNames(tweet, award):
 	names = []

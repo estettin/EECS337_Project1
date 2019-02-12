@@ -112,7 +112,7 @@ def main():
     run when grading. Do NOT change the name of this function or
     what it returns.'''
     # Your code here
-    years = ["2013"]
+    years = ["2015"]
     for year in years:
         tweets_dictionary = helpers.loadTweetsFromJson(year)
         
@@ -124,8 +124,10 @@ def main():
         else:
             awards = config1819.awardarray
         winners_dict = {}
+        presenters_dict = {}
         for award in awards:
             winners_dict[award.name] = Counter()
+            presenters_dict[award.name] = Counter()
 
 
         print (tweet_count)
@@ -153,21 +155,43 @@ def main():
 
             for award in awards:
                 if tweetsorter.sortTweet(tweet,award): #is this tweet relevant for the given award
-                    winner.findWinner(award,tweet, winners_dict, tweets_dictionary[tweet])
+                    # add possible winners to dictionary
+                    winner.findWinner(award,tweet, winners_dict[award.name], tweets_dictionary[tweet])
+                    # add presenters to dictionary
+                    pres.findPresenters(award, tweet, presenters_dict[award.name] ,tweets_dictionary[tweet])
+
 
                                         # WINNER
                     # winner.findWinner(award,tweet, winners_dict, tweets_dictionary[tweet])
                     # PRESENTERS
 
                     # NOMINEES
+        for award in awards:
+            print(award.name)
+            print(presenters_dict[award.name].most_common(3))
+        
         final_results = {}
         for a in awards:
             final_results[a.name] = results.Award()
+            
             final_results[a.name].name = a.name
+
             winners = winners_dict[a.name].most_common(1) 
             if len(winners) > 0:
                 final_results[a.name].winner = winners[0][0]
+            else:
+                final_results[a.name].winner = ""
             print(a.name, "     ", final_results[a.name].winner)
+
+            # 
+            presenters = presenters_dict[a.name].most_common(2) 
+            if len(presenters) > 0:
+                final_results[a.name].presenters = [presenters[0][0]]
+                if len(presenters) > 1 and presenters[1][1] >= .5 * presenters[0][1]:
+                    final_results[a.name].presenters.append(presenters[1][0])
+            else:
+                final_results[a.name].presenters = []
+            print(a.name, "     ", final_results[a.name].presenters)
         
     
         # process winners for each award

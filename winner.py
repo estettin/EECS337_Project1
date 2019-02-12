@@ -11,9 +11,8 @@ ia = IMDb()
 import string 
 import helpers
 
-def findWinner(a, t, winner_dict, count):
+def findWinner(a, t, wdict, count):
 	# print("starting to find winner")
-	wdict = winner_dict[a.name]
 	if a.awardtype == "movie":
 		y = re.findall("(\".*\") wins best",t, re.IGNORECASE)
 		if y and "best" not in y[0].lower():
