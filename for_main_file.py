@@ -11,33 +11,19 @@ from random import sample
 import operator
 import copy
 
-with open('tweets2015.csv', 'r', encoding = "utf-8") as f:
-  	reader = csv.reader(f)
-  	tweets2015 = list(reader)[0]
 
-punc = [".",":","!","?","#",",","<", "@"]
-rt_words = ["wins", "for", "goes", "to", "dressed", "winner", "winners", "at", "win", "from", "went", "won"]
-rhs_nest = [[w.lower(), w.upper(), w.title()] for w in rt_words]
+#Parameters to the Main function:
+tweets_dictionary = {}
 
-rhs = [item for sublist in rhs_nest for item in sublist]
-# ["wins", "Wins", "for", "goes", "to", "dressed", "Goes", "winner", "Winner", "at", "win", "Win", "WIN", "For", "FOR", "AT", "At"]
+#GLOBAL VARIABLES FOR OUR FUNCTION:
+phrases = {}
 
-def FindAwards(data, num_awards):
-	"""
-	takes in the tweets as an an array of string and identifies award names
-	"""
-	phrases = {}
-	for tweet in data:
+def PopulatePhrasesforAwards(tweet,count):
 		match = re.search(r"best\s|Best\s|BEST\s", tweet)
-		# print(match)
 		if match == None:
 			continue
-
-		# print(match.string)
 		tweet_arr = re.findall(r"[\w']+|[.:,!?\#-]", tweet[match.start():])
 		tweet_arr = list(filter(None, tweet_arr))
-		# print(tweet_arr)
-
 		end = 0
 		found_hyph = False
 		for i in range(1,len(tweet_arr)):
@@ -51,11 +37,12 @@ def FindAwards(data, num_awards):
 				if p[end-3:end] == " - ":
 					p = p[:end - 3]
 				if p in phrases.keys():
-					phrases[p] += 1
+					phrases[p] += count
 				else:
-					phrases[p] = 1
+					phrases[p] = count
 				break
 
+def PostProcessFindAwards(phrases, num_awards):
 	s = [{k: phrases[k]} for k in sorted(phrases, key=phrases.get, reverse=True)]
 	thresh = [v for k,v in s[1000].items()][0]
 	sorted_phrases = {k: v for k, v in phrases.items() if v > thresh}
@@ -94,15 +81,8 @@ def FindAwards(data, num_awards):
 
 	final_list = [{k: s_reduced[k]} for k in sorted(s_reduced, key=s_reduced.get, reverse=True)]
 	awardslist = final_list[:num_awards]
-	# maxcount = [v for v in final_list[0].values()][0]
-	# awardslist = []
-	# for a in final_list:
-	# 	if [v for v in a.values()][0] >= .1*maxcount:
-	# 		awardslist.append(a)
-	# awardslist = [[v.title() for v in d.keys()][0] for d in awardslist]
+	awardslist = [[v.title() for v in d.keys()][0] for d in awardslist]
+	return awardslist
 
 
-	pprint(awardslist)
 
-#random.shuffle(tweets2015)
-x = FindAwards(tweets2015, 26)
