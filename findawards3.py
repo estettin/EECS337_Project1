@@ -57,30 +57,42 @@ def FindAwards(data):
 				p = " ".join(tweet_arr[0:end])
 				if p[end-3:end] == " - ":
 					p = p[:end - 3]
-				if " - " in p:
-					r = p[p.index("-") + 1:].strip()
-					l = p[:p.index("-")].strip()
-					doc = nlp(r)
-					for ent in doc.ents:
-						if ent.label_ == "PERSON" or ent.label_ == "WORK_OF_ART":
-							p = l
-							break
-				p = str(p).lower()
 				if p in phrases.keys():
 					phrases[p] += 1
 				else:
 					phrases[p] = 1
 				break
+
 	s = [{k: phrases[k]} for k in sorted(phrases, key=phrases.get, reverse=True)]
+	s_reduced = {}
 
+	for d in s:
+		key = [v for v in d.keys()][0]
+		if " - " in key:
+			r = key[key.index("-") + 1:].strip()
+			l = key[:key.index("-")].strip()
+			doc = nlp(r)
+			for ent in doc.ents:
+				if ent.label_ == "PERSON" or ent.label_ == "WORK_OF_ART":
+					key = l
+					break
+		key = key.lower()
+		if "-" in key:
+			key = key.replace(" - ", " ")
+		if key in s_reduced.keys():
+			s_reduced[key] += [v for v in d.values()][0]
+		else:
+			s_reduced[key] =  [v for v in d.values()][0]
+	print(len(s_reduced))
+	final = [{k: s_reduced[k]} for k in sorted(s_reduced, key=s_reduced.get, reverse=True)]
 
-
-	maxcount = [v for v in s[0].values()][0]
+	maxcount = [v for v in final[0].values()][0]
 	awardslist = []
-	for a in s:
+	for a in final:
 		if [v for v in a.values()][0] >= .1*maxcount:
 			awardslist.append(a)
 	pprint(awardslist)
+
 
 #random.shuffle(tweets2015)
 x = FindAwards(tweets2015)
