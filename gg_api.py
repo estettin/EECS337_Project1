@@ -11,6 +11,7 @@ import winner
 import awards as pres
 import nominees as nom
 from collections import Counter
+import results
 
 OFFICIAL_AWARDS = ['cecil b. demille award', 'best motion picture - drama', 'best performance by an actress in a motion picture - drama', 'best performance by an actor in a motion picture - drama', 'best motion picture - comedy or musical', 'best performance by an actress in a motion picture - comedy or musical', 'best performance by an actor in a motion picture - comedy or musical', 'best animated feature film', 'best foreign language film', 'best performance by an actress in a supporting role in a motion picture', 'best performance by an actor in a supporting role in a motion picture', 'best director - motion picture', 'best screenplay - motion picture', 'best original score - motion picture', 'best original song - motion picture', 'best television series - drama', 'best performance by an actress in a television series - drama', 'best performance by an actor in a television series - drama', 'best television series - comedy or musical', 'best performance by an actress in a television series - comedy or musical', 'best performance by an actor in a television series - comedy or musical', 'best mini-series or motion picture made for television', 'best performance by an actress in a mini-series or motion picture made for television', 'best performance by an actor in a mini-series or motion picture made for television', 'best performance by an actress in a supporting role in a series, mini-series or motion picture made for television', 'best performance by an actor in a supporting role in a series, mini-series or motion picture made for television']
 # put official awards in
@@ -111,36 +112,69 @@ def main():
     run when grading. Do NOT change the name of this function or
     what it returns.'''
     # Your code here
-    years = ["2013","2015"]
+    years = ["2013"]
     for year in years:
         tweets_dictionary = helpers.loadTweetsFromJson(year)
         
         presenter_counter = Counter()
         tweet_count = len(tweets_dictionary)
         count = 0
+        if year == "2013" or year == "2015":
+            awards = config.awardarray
+        else:
+            awards = config1819.awardarray
+        winners_dict = {}
+        for award in awards:
+            winners_dict[award.name] = Counter()
+
+
+        print (tweet_count)
         for tweet in tweets_dictionary:
-            # host_bigrams = hosttest.getHostBigrams(tweet)
-            # if len(host_bigrams) > 0:
-            #     for bg in host_bigrams:
-            #         presenter_counter[bg] += 1
+            
+            # HOST TWEET
             count = count + 1
+            # if count % 1000 == 0:
+            #     print (count)
+            # print (count)
+            if count == int(tweet_count/4):
+                print("25% done")
+            elif count == int(tweet_count/2):
+                print("50% done")
+            elif count == int(tweet_count*3/4):
+                print("75% done")
+
             if count < tweet_count / 4:
                 host_bigrams = hosttest.regexHosts(tweet)
                 if len(host_bigrams) > 0:
                     for bg in host_bigrams:
                         presenter_counter[bg] += 1
+            # AWARDS
+
+
+            for award in awards:
+                if tweetsorter.sortTweet(tweet,award): #is this tweet relevant for the given award
+                    winner.findWinner(award,tweet, winners_dict, tweets_dictionary[tweet])
+
+                                        # WINNER
+                    # winner.findWinner(award,tweet, winners_dict, tweets_dictionary[tweet])
+                    # PRESENTERS
+
+                    # NOMINEES
+        final_results = {}
+        for a in awards:
+            final_results[a.name] = results.Award()
+            final_results[a.name].name = a.name
+            winners = winners_dict[a.name].most_common(1) 
+            if len(winners) > 0:
+                final_results[a.name].winner = winners[0][0]
+            print(a.name, "     ", final_results[a.name].winner)
         
-        #for each tweet
-            #for each award
-                #check if its relevant (sort tweets)
-                #winner
-                #presenters
-                #nominees
+    
         # process winners for each award
         # process presenters for each award
         # process nominees for each award
         # human print
-        print(presenter_counter.most_common(3))
+        # print(presenter_counter.most_common(3))
         # Find host from bigram counter
         print("Finding hosts")
         hosts = hosttest.determineHosts(presenter_counter)

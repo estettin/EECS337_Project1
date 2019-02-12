@@ -54,9 +54,9 @@ def regexHosts(tweet):
 def determineHosts(bigramCounter):
 	possible_hosts = bigramCounter.most_common(2)
 	final_hosts = []
-	host_one = possible_hosts[0][0][0].capitalize() + " " + possible_hosts[0][0][1].capitalize()
+	host_one = possible_hosts[0][0]
 	final_hosts.append(host_one)
 	if possible_hosts[1][1] > possible_hosts[0][1] * 4/5:
-		host_two = possible_hosts[1][0][0].capitalize() + " " + possible_hosts[1][0][1].capitalize()
+		host_two = possible_hosts[1][0]
 		final_hosts.append(host_two)
 	return final_hosts
