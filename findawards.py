@@ -69,7 +69,6 @@ def FindAwards(data):
 	thresh = [v for k,v in s[1000].items()][0]
 	sorted_phrases = {k: v for k, v in phrases.items() if v > thresh}
 
-	
 	# sorted_phrases = s[0]
 	# for d in s[1:5000]:
 	# 	sorted_phrases.update(d)
@@ -115,7 +114,14 @@ def FindAwards(data):
 	# for k in list(s[0].keys())[:50]:
 		# pprint("%s: %s" % (k, s[0][k]))
 	# print(sorted_phrases2)
-	pprint(s2[:27])
+
+	maxcount = [v for v in s[0].values()][0]
+	awardslist = []
+	for a in s:
+		if [v for v in a.values()][0] >= .2*maxcount:
+			awardslist.append(a)
+	pprint(awardslist)
+	pprint(s[:39])
 
 # random.shuffle(tweets2015)
 x = FindAwards(tweets2015)
