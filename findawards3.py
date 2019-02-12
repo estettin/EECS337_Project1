@@ -57,70 +57,30 @@ def FindAwards(data):
 				p = " ".join(tweet_arr[0:end])
 				if p[end-3:end] == " - ":
 					p = p[:end - 3]
+				if " - " in p:
+					r = p[p.index("-") + 1:].strip()
+					l = p[:p.index("-")].strip()
+					doc = nlp(r)
+					for ent in doc.ents:
+						if ent.label_ == "PERSON" or ent.label_ == "WORK_OF_ART":
+							p = l
+							break
+				p = str(p).lower()
 				if p in phrases.keys():
 					phrases[p] += 1
 				else:
 					phrases[p] = 1
 				break
-
-	print(len(phrases.keys()))
-
 	s = [{k: phrases[k]} for k in sorted(phrases, key=phrases.get, reverse=True)]
-	thresh = [v for k,v in s[1000].items()][0]
-	sorted_phrases = {k: v for k, v in phrases.items() if v > thresh}
 
-	# sorted_phrases = s[0]
-	# for d in s[1:5000]:
-	# 	sorted_phrases.update(d)
 
-	sorted_phrases2 = {}
-	for k in sorted_phrases.keys():
-		doc = nlp(u'' + k)
-		new_p = k
-		for ent in doc.ents:
-			if ent.label_ == "PERSON":
-				new_p = k[:ent.start_char]
-				# print(ent, new_p)
-				# print(new_p)
-		if new_p == '':
-			continue
-		else:
-			if new_p.title() in [p.title() for p in sorted_phrases2.keys()]:
-				sorted_phrases2[new_p.title()] += sorted_phrases[k]
-			else:
-				sorted_phrases2[new_p.title()] = sorted_phrases[k]
 
-	# for k in sorted_phrases2.keys()
-			
-		# elif [p.lower().find(new_p) for p in sorted_phrases2.keys()] != -1:
-		# 	pass
-		# else:
-
-	dup = copy.deepcopy(sorted_phrases2)
-	
-	
-	for k,v in dup.items():
-		for phrase in dup.keys():
-			if k in phrase and k != phrase:
-				del sorted_phrases2[k]
-				break
-				
-				
-
-	# pprint(sorted_phrases2)
-	# pprint(phrases.keys())
-	
-	s2 = [{k: sorted_phrases2[k]} for k in sorted(sorted_phrases2, key=sorted_phrases2.get, reverse=True)]
-	# for k in list(s[0].keys())[:50]:
-		# pprint("%s: %s" % (k, s[0][k]))
-	# print(sorted_phrases2)
-
-	maxcount = [v for v in s2[0].values()][0]
+	maxcount = [v for v in s[0].values()][0]
 	awardslist = []
-	for a in s2:
-		if [v for v in a.values()][0] >= .25*maxcount:
+	for a in s:
+		if [v for v in a.values()][0] >= .1*maxcount:
 			awardslist.append(a)
 	pprint(awardslist)
 
-# random.shuffle(tweets2015)
+#random.shuffle(tweets2015)
 x = FindAwards(tweets2015)
