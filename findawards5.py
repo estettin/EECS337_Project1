@@ -1,8 +1,9 @@
 import json
 import nltk
 from pprint import pprint
-from nltk.corpus import stopwords, treebank_chunk
+from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
+from nltk.chunk import tree2conlltags
 import re
 import random
 # from populate_db import tweets2013
@@ -11,35 +12,26 @@ import csv
 from random import sample
 import operator
 import copy
-from nltk.chunk import conlltags2tree, tree2conlltags
 
-
-with open('tweets2015.csv', 'r') as f:
+with open('tweets2015.csv', 'r', encoding = "utf-8") as f:
   	reader = csv.reader(f)
   	tweets2015 = list(reader)[0]
-  
 
-punc = [".",":","!","?","#",",","<"]
-lhs = ["wins", "Wins", "for"]
-rhs = ["wins", "Wins", "for", "goes", "to", "dressed", "Goes", "winner", "Winner", "at"]
-search_keys = ["best"]
+punc = [".",":","!","?","#",",","<", "@"]
+rt_words = ["wins", "for", "goes", "to", "dressed", "winner", "winners", "at", "win", "from", "went", "won"]
+rhs_nest = [[w.lower(), w.upper(), w.title()] for w in rt_words]
 
-"""
-Phrases to look for:
-wins _______ for
-the award for
-wins
-"""
+rhs = [item for sublist in rhs_nest for item in sublist]
+# ["wins", "Wins", "for", "goes", "to", "dressed", "Goes", "winner", "Winner", "at", "win", "Win", "WIN", "For", "FOR", "AT", "At"]
 
 def FindAwards(data, num_awards):
 	"""
 	takes in the tweets as an an array of string and identifies award names
 	"""
 	phrases = {}
-
-	# nlp = spacy.load("en_core_web_sm")
+	nlp = spacy.load("en_core_web_sm")
 	for tweet in data:
-		match = re.search(r'Best\s|BEST\s|best\s', tweet)
+		match = re.search(r"best\s|Best\s|BEST\s", tweet)
 		# print(match)
 		if match == None:
 			continue
@@ -54,17 +46,7 @@ def FindAwards(data, num_awards):
 		for i in range(1,len(tweet_arr)):
 			if tweet_arr[i] == "-" and not found_hyph:
 				found_hyph = True
-				if i+1 >= len(tweet_arr):
-					continue
-				tok_arr = nltk.word_tokenize(' '.join([j for j in tweet_arr[i+1:i+3]]))
-				tagged = nltk.pos_tag(tok_arr)
-				tree = nltk.chunk.ne_chunk(tagged)
-				iob_tagged = tree2conlltags(tree)
-				if iob_tagged != [] and ('PERSON' not in iob_tagged[0][2]):# and ('ORGANIZATION' not in iob_tagged[0][2]):#and ('LOCATION' not in iob_tagged[0][2]):
-					# print(iob_tagged)
-					continue
-
-			if tweet_arr[i] in punc or (tweet_arr[i] in rhs) or (found_hyph and tweet_arr[i] == "-"):
+			elif tweet_arr[i] in punc or (tweet_arr[i] in rhs) or (found_hyph and tweet_arr[i] == "-"):
 				end = i
 				if end <= 1:
 					break
@@ -77,75 +59,53 @@ def FindAwards(data, num_awards):
 					phrases[p] = 1
 				break
 
-	print(len(phrases.keys()))
-
 	s = [{k: phrases[k]} for k in sorted(phrases, key=phrases.get, reverse=True)]
 	thresh = [v for k,v in s[1000].items()][0]
-	sorted_phrases = {k: v for k, v in s[0].items() if v > thresh}
+	sorted_phrases = {k: v for k, v in phrases.items() if v > thresh}
+	s_reduced = {}
 
-	
-	# sorted_phrases = s[0]
-	# for d in s[1:5000]:
-	# 	sorted_phrases.update(d)
+	for key, val in sorted_phrases.items():
+		if " - " in key:
+			r = key[key.index("-") + 1:].strip()
+			l = key[:key.index("-")].strip()
 
-	sorted_phrases2 = {}
-	for k in sorted_phrases.keys():
-		# st = nltk.word_tokenize(k)
-		# tagged = nltk.pos_tag(st)
-		# print(tagged)
-
-		# entities = nltk.chunk.ne_chunk(tagged)
-		# print(entities)
-		# pprint(entities)
-		new_p = k
-		# # print(k)
-		# for chunk in tagged:
-		# 	if chunk[1] == 'PERSON':
-		# 		break
-		# 	if chunk[1] == ':':
-		# 		new_p = new_p + chunk[0] + ' '
-		# 	else:
-		# 		print(chunk[0])
-		# 		new_p = new_p + ' ' + chunk[0]
-
-
-				# print(ent, new_p)
-		# print(new_p)
-
-		# print(new_p)
-		if new_p == '':
-			continue
+			tok_arr = nltk.word_tokenize(r)
+			tagged = nltk.pos_tag(tok_arr)
+			tree = nltk.chunk.ne_chunk(tagged)
+			iob_tagged = tree2conlltags(tree)
+			if iob_tagged != [] and 'PERSON' in iob_tagged[0][2]:
+				key = l
+				continue
+			# doc = nlp(r)
+			# for ent in doc.ents:
+			# 	if ent.label_ == "PERSON" or ent.label_ == "WORK_OF_ART":
+					
+		key = key.lower()
+		if "-" in key:
+			key = key.replace(" - ", " ")
+		if key in s_reduced.keys():
+			s_reduced[key] += val
 		else:
-			if new_p.title() in [p.title() for p in sorted_phrases2.keys()]:
-				sorted_phrases2[new_p.title()] += sorted_phrases[k]
-			else:
-				sorted_phrases2[new_p.title()] = sorted_phrases[k]
+			s_reduced[key] =  val
 
-	# for k in sorted_phrases2.keys()
-			
-		# elif [p.lower().find(new_p) for p in sorted_phrases2.keys()] != -1:
-		# 	pass
-		# else:
+	dup = copy.deepcopy(s_reduced)
+	for k,v in dup.items():
+		for phrase in dup.keys():
+			if k in phrase and k != phrase:
+				del s_reduced[k]
+				break
 
-	dup = copy.deepcopy(sorted_phrases2)
+	final_list = [{k: s_reduced[k]} for k in sorted(s_reduced, key=s_reduced.get, reverse=True)]
+	awardslist = final_list[:num_awards]
+	# maxcount = [v for v in final_list[0].values()][0]
+	# awardslist = []
+	# for a in final_list:
+	# 	if [v for v in a.values()][0] >= .1*maxcount:
+	# 		awardslist.append(a)
+	# awardslist = [[v.title() for v in d.keys()][0] for d in awardslist]
 
-	
-	# for k,v in dup.items():
-	# 	for phrase in dup.keys():
-	# 		if k in phrase and k != phrase:
-	# 			del sorted_phrases2[k]
-	# 			break
-				
-				
 
-	# pprint(sorted_phrases2)
-	# pprint(phrases.keys())
-	
-	s2 = [{k: sorted_phrases2[k]} for k in sorted(sorted_phrases2, key=sorted_phrases2.get, reverse=True)]
-	# for k in list(s[0].keys())[:50]:
-	# 	pprint("%s: %s" % (k, s[0][k]))
-	# print(sorted_phrases2)
-	pprint(s2[:num_awards])
+	pprint(awardslist)
 
-# random.shuffle(tweets2015)
+#random.shuffle(tweets2015)
 x = FindAwards(tweets2015, 26)

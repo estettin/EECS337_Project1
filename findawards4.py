@@ -1,17 +1,13 @@
 import json
 import nltk
 from pprint import pprint
-from nltk.corpus import stopwords, treebank_chunk
+from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize 
 import re
-import random
-# from populate_db import tweets2013
 import spacy
 import csv
-from random import sample
-import operator
 import copy
-from nltk.chunk import conlltags2tree, tree2conlltags
+from nltk.chunk import tree2conlltags
 
 
 with open('tweets2015.csv', 'r') as f:
@@ -22,7 +18,6 @@ with open('tweets2015.csv', 'r') as f:
 punc = [".",":","!","?","#",",","<"]
 lhs = ["wins", "Wins", "for"]
 rhs = ["wins", "Wins", "for", "goes", "to", "dressed", "Goes", "winner", "Winner", "at"]
-search_keys = ["best"]
 
 """
 Phrases to look for:
@@ -39,7 +34,7 @@ def FindAwards(data, num_awards):
 
 	# nlp = spacy.load("en_core_web_sm")
 	for tweet in data:
-		match = re.search(''.join(term.lower()+ "\s|" + term.upper() + "\s|" + term.title() + "\s|" + term.capitalize() + "\s" for term in search_keys), tweet)
+		match = re.search(r'best\s|Best\s|BEST\s', tweet)
 		# print(match)
 		if match == None:
 			continue
@@ -61,8 +56,7 @@ def FindAwards(data, num_awards):
 				tagged = nltk.pos_tag(tok_arr)
 				tree = nltk.chunk.ne_chunk(tagged)
 				iob_tagged = tree2conlltags(tree)
-				if iob_tagged != [] and 'PERSON' not in iob_tagged[0][2]:
-					# print(iob_tagged)
+				if iob_tagged != [] and 'PERSON' not in iob_tagged[0][2] and iob_tagged[0][0] != '-':
 					continue
 
 			if tweet_arr[i] in punc or (tweet_arr[i] in rhs) or (found_hyph and tweet_arr[i] == "-"):
@@ -77,17 +71,13 @@ def FindAwards(data, num_awards):
 				else:
 					phrases[p] = 1
 				break
-
+	print("DONE")
 	print(len(phrases.keys()))
 
 	s = [{k: phrases[k]} for k in sorted(phrases, key=phrases.get, reverse=True)]
 	thresh = [v for k,v in s[1000].items()][0]
 	sorted_phrases = {k: v for k, v in phrases.items() if v > thresh}
 
-	
-	# sorted_phrases = s[0]
-	# for d in s[1:5000]:
-	# 	sorted_phrases.update(d)
 
 	sorted_phrases2 = {}
 	for k in sorted_phrases.keys():
@@ -129,8 +119,6 @@ def FindAwards(data, num_awards):
 		# else:
 
 	dup = copy.deepcopy(sorted_phrases2)
-
-	
 	for k,v in dup.items():
 		for phrase in dup.keys():
 			if k in phrase and k != phrase:

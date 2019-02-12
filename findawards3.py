@@ -12,21 +12,21 @@ from random import sample
 import operator
 import copy
 
-with open('tweets2013.csv', 'r', encoding = "utf-8") as f:
+with open('tweets2015.csv', 'r', encoding = "utf-8") as f:
   	reader = csv.reader(f)
   	tweets2015 = list(reader)[0]
 
 punc = [".",":","!","?","#",",","<", "@"]
-rhs = ["wins", "Wins", "for", "goes", "to", "dressed", "Goes", "winner", "Winner", "at"]
+rhs = ["wins", "Wins", "for", "goes", "to", "Goes", "winner", "Winner", "at"]
 
-def FindAwards(data):
+def FindAwards(data, num_awards):
 	"""
 	takes in the tweets as an an array of string and identifies award names
 	"""
 	phrases = {}
 	nlp = spacy.load("en_core_web_sm")
 	for tweet in data:
-		match = re.search("best\s|Best\s", tweet)
+		match = re.search(r"best\s|Best\s|BEST\s", tweet)
 		# print(match)
 		if match == None:
 			continue
@@ -76,16 +76,16 @@ def FindAwards(data):
 			s_reduced[key] =  [v for v in d.values()][0]
 
 	final_list = [{k: s_reduced[k]} for k in sorted(s_reduced, key=s_reduced.get, reverse=True)]
-	
-	maxcount = [v for v in final_list[0].values()][0]
-	awardslist = []
-	for a in final_list:
-		if [v for v in a.values()][0] >= .1*maxcount:
-			awardslist.append(a)
-	awardslist = [[v.title() for v in d.keys()][0] for d in awardslist]
+	awardslist = final_list[:num_awards]
+	# maxcount = [v for v in final_list[0].values()][0]
+	# awardslist = []
+	# for a in final_list:
+	# 	if [v for v in a.values()][0] >= .1*maxcount:
+	# 		awardslist.append(a)
+	# awardslist = [[v.title() for v in d.keys()][0] for d in awardslist]
 
 
 	pprint(awardslist)
 
 #random.shuffle(tweets2015)
-x = FindAwards(tweets2015)
+x = FindAwards(tweets2015, 26)
