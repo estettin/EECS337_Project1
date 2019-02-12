@@ -12,7 +12,6 @@ from random import sample
 import operator
 import copy
 
-with open('tweets2013.csv', 'r') as f:
 with open('tweets2013.csv', 'r', encoding = "utf-8") as f:
   	reader = csv.reader(f)
   	tweets2015 = list(reader)[0]
