@@ -12,13 +12,15 @@ from random import sample
 import operator
 import copy
 
-with open('tweets2015.csv', 'r', encoding = "utf-8") as f:
+with open('tweets2013.csv', 'r', encoding = "utf-8") as f:
   	reader = csv.reader(f)
   	tweets2015 = list(reader)[0]
 
 punc = [".",":","!","?","#",",","<", "@"]
-rhs = ["wins", "Wins", "for", "goes", "to", "Goes", "winner", "Winner", "at"]
+rt_words = ["wins", "goes", "to", "dressed", "winner", "winners", "at", "is", "are", "for", "win", "from", "went", "won"]
+rhs_nest = [[w.lower(), w.upper(), w.title()] for w in rt_words]
 
+rhs = [item for sublist in rhs_nest for item in sublist]
 def FindAwards(data, num_awards):
 	"""
 	takes in the tweets as an an array of string and identifies award names
@@ -75,6 +77,12 @@ def FindAwards(data, num_awards):
 		else:
 			s_reduced[key] =  [v for v in d.values()][0]
 
+	dup = copy.deepcopy(s_reduced)
+	for k,v in dup.items():
+		for phrase in dup.keys():
+			if k in phrase and k != phrase:
+				del s_reduced[k]
+				break
 	final_list = [{k: s_reduced[k]} for k in sorted(s_reduced, key=s_reduced.get, reverse=True)]
 	awardslist = final_list[:num_awards]
 	# maxcount = [v for v in final_list[0].values()][0]
