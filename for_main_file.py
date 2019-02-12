@@ -17,6 +17,10 @@ tweets_dictionary = {}
 
 #GLOBAL VARIABLES FOR OUR FUNCTION:
 phrases = {}
+punc = [".",":","!","?","#",",","<", "@"]
+rt_words = ["wins", "goes", "to", "dressed", "winner", "winners", "at", "win", "from", "went", "won"]
+rhs_nest = [[w.lower(), w.upper(), w.title()] for w in rt_words]
+rhs = [item for sublist in rhs_nest for item in sublist]
 
 def PopulatePhrasesforAwards(tweet,count):
 		match = re.search(r"best\s|Best\s|BEST\s", tweet)
@@ -59,11 +63,8 @@ def PostProcessFindAwards(phrases, num_awards):
 			iob_tagged = tree2conlltags(tree)
 			if iob_tagged != [] and 'PERSON' in iob_tagged[0][2]:
 				key = l
-				continue
-			# doc = nlp(r)
-			# for ent in doc.ents:
-			# 	if ent.label_ == "PERSON" or ent.label_ == "WORK_OF_ART":
-					
+				continue	
+								
 		key = key.lower()
 		if "-" in key:
 			key = key.replace(" - ", " ")
