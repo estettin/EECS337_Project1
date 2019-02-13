@@ -26,4 +26,6 @@ or
 ```>> nltk.download()``` in python3 shell open interactive installer
 Select all-nltk and download
 
-## References
+## References - Larry said to list repos that we looked at for references. We looked at these two github repos to look for ideas about what regex searches to use for our code. 
+- https://github.com/brownrout/EECS-337-Golden-Globes
+- https://github.com/olivergoodman/goldenglobes
