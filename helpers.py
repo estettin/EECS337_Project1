@@ -75,7 +75,7 @@ def finalizePresenters(d):
 	return final_list
 
 
-def finalizeNominees(c, winner, a):
+def finalizeNominees(c, winner, a, year):
 	atype = a.awardtype
 	ndict = Counter()
 	for k in c:
@@ -92,8 +92,15 @@ def finalizeNominees(c, winner, a):
 					movies = ia.search_movie(k)
 					if len(movies) > 0:
 						title = movies[0]["title"]
-						if not winner == title:
-							ndict[title] += count
+						if not "television" in a.name:
+							if "year" in movies[0]:
+								movieyear = movies[0]["year"]
+								if int(year) == movieyear or int(year) - 1 == movieyear:
+									if not winner == title:
+										ndict[title] += count
+						else:
+							if not winner == title:
+								ndict[title] += count
 		else:
 			if len(k.split(" ")) < 4:
 				good = True

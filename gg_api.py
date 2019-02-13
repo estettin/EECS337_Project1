@@ -14,6 +14,7 @@ from collections import Counter
 import results
 import findawards
 import sentiment 
+import redcarpet
 
 OFFICIAL_AWARDS = ['cecil b. demille award', 'best motion picture - drama', 'best performance by an actress in a motion picture - drama', 'best performance by an actor in a motion picture - drama', 'best motion picture - comedy or musical', 'best performance by an actress in a motion picture - comedy or musical', 'best performance by an actor in a motion picture - comedy or musical', 'best animated feature film', 'best foreign language film', 'best performance by an actress in a supporting role in a motion picture', 'best performance by an actor in a supporting role in a motion picture', 'best director - motion picture', 'best screenplay - motion picture', 'best original score - motion picture', 'best original song - motion picture', 'best television series - drama', 'best performance by an actress in a television series - drama', 'best performance by an actor in a television series - drama', 'best television series - comedy or musical', 'best performance by an actress in a television series - comedy or musical', 'best performance by an actor in a television series - comedy or musical', 'best mini-series or motion picture made for television', 'best performance by an actress in a mini-series or motion picture made for television', 'best performance by an actor in a mini-series or motion picture made for television', 'best performance by an actress in a supporting role in a series, mini-series or motion picture made for television', 'best performance by an actor in a supporting role in a series, mini-series or motion picture made for television']
 # put official awards in
@@ -85,7 +86,7 @@ def main():
     run when grading. Do NOT change the name of this function or
     what it returns.'''
     # Your code here
-    years = ["2013"]
+    years = ["2013", "2015"]
     for year in years:
         tweets_dictionary = helpers.loadTweetsFromJson(year)
         hosttweets = {}
@@ -100,6 +101,8 @@ def main():
         presenters_dict = {}
         nominees_dict = {}
         phrases = {}
+        best_dressed_counter = Counter()
+        worst_dressed_counter = Counter()
         for award in awards:
             winners_dict[award.name] = Counter()
             presenters_dict[award.name] = Counter()
@@ -127,6 +130,10 @@ def main():
                 if len(host_bigrams) > 0:
                     for bg in host_bigrams:
                         presenter_counter[bg] += 1
+
+            redcarpet.getRedCarpetInfo(tweet, best_dressed_counter, worst_dressed_counter, tweets_dictionary[tweet])    
+
+
             # AWARDS
             findawards.PopulatePhrasesforAwards(tweet,tweets_dictionary[tweet],phrases)
 
@@ -165,13 +172,13 @@ def main():
             final_results[a.name].presenters = helpers.finalizePresenters(presenters_dict[a.name]) 
             print("Presenters: ", final_results[a.name].presenters)
             
-            final_results[a.name].nominees = helpers.finalizeNominees(nominees_dict[a.name], final_results[a.name].winner, a)
+            final_results[a.name].nominees = helpers.finalizeNominees(nominees_dict[a.name], final_results[a.name].winner, a, year)
             print("Nominees: ", final_results[a.name].nominees)
             print( " ")
 
         hosts = hosttest.determineHosts(presenter_counter)
         print("Hosts: ", hosts)
-        print("Finished finding hosts")
+        print("")
         hostJSON = {}
         hostJSON["hosts"] = hosts
         #awards
@@ -199,10 +206,27 @@ def main():
             json.dump(awardsJSON, fp)
 
         host_sentiment = {}
+        print("Host Sentiment:")
         for host in hosts:
             host_sentiment[host] = sentiment.findSentiment(hosttweets[host])
+            print("     ", host, ": ", host_sentiment[host])
 
-        print(host_sentiment)
+        best_dressed = best_dressed_counter.most_common(1)
+        if len(best_dressed) > 0:
+            best_dressed = best_dressed[0][0]
+        else:
+            best_dressed = ""
+        worst_dressed = worst_dressed_counter.most_common(1)
+        if len(worst_dressed) > 0:
+            worst_dressed = worst_dressed[0][0]
+        else:
+            worst_dressed = ""
+        
+        
+        print("Best Dressed: ", best_dressed)
+        print("Worst Dressed: ", worst_dressed)
+        print("")
+
 
 
 

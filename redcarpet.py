@@ -3,17 +3,30 @@ import nltk
 from pprint import pprint
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize
-from populate_db import tweets2013 #, tweets2015
+import re
 
-data = tweets2013
+def getRedCarpetInfo(tweet, best_dressed_counter, worst_dressed_counter, count):
 
-def getRedCarpetInfo(data):
-	bkeystrings = []
-	wkeystrings = []
+	br = re.findall("(.*) best dressed", tweet, re.IGNORECASE)
+	if br:
+		br1 = re.findall("((?:[A-Z][a-z]+) (?:[A-Z][a-z]+))", br[0])
+		if br1:
+			for n in br1:
+				if not "golden" in n.lower() and not "globes" in n.lower():
+					best_dressed_counter[n] += count
 
-	stops = set(stopwords.words('english'))
-	stops.update(["best","worst","dressed","goldenglobes", "golden", "globes", "rt", "http", "outfit", "dress", "tux", "gown", "tuxedo", "eredcarpet"])
+	wr = re.findall("(.*) worst dressed", tweet, re.IGNORECASE)
+	if wr:
+		wr1 = re.findall("((?:[A-Z][a-z]+) (?:[A-Z][a-z]+))", wr[0])
+		if wr1:
+			for n in wr1:
+				if not "golden" in n.lower() and not "globes" in n.lower():
+					worst_dressed_counter[n] += count
 
+
+	# stops = set(stopwords.words('english'))
+	# stops.update(["best","worst","dressed","goldenglobes", "golden", "globes", "rt", "http", "outfit", "dress", "tux", "gown", "tuxedo", "eredcarpet"])
+"""
 	for i in range(0,len(data)):
 		if "best dressed" in data[i] and "worst" not in data[i]:
 			bstring = ''.join([z if ord(str(z)) < 128 else '' for z in data[i]])
@@ -105,4 +118,5 @@ def getRedCarpetInfo(data):
 
 x = getRedCarpetInfo(data)
 print(x)
+"""
 
