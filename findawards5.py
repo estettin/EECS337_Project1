@@ -22,7 +22,7 @@ rhs_nest = [[w.lower(), w.upper(), w.title()] for w in rt_words]
 rhs = [item for sublist in rhs_nest for item in sublist]
 # ["wins", "Wins", "for", "goes", "to", "dressed", "Goes", "winner", "Winner", "at", "win", "Win", "WIN", "For", "FOR", "AT", "At"]
 
-def FindAwards(data, num_awards):
+def FindAwards(data):
 	"""
 	takes in the tweets as an an array of string and identifies award names
 	"""
@@ -93,16 +93,14 @@ def FindAwards(data, num_awards):
 				break
 
 	final_list = [{k: s_reduced[k]} for k in sorted(s_reduced, key=s_reduced.get, reverse=True)]
-	awardslist = final_list[:num_awards]
-	# maxcount = [v for v in final_list[0].values()][0]
-	# awardslist = []
-	# for a in final_list:
-	# 	if [v for v in a.values()][0] >= .1*maxcount:
-	# 		awardslist.append(a)
-	# awardslist = [[v.title() for v in d.keys()][0] for d in awardslist]
-
-
+	maxcount = [v for v in final_list[0].values()][0]
+	awardslist = []
+	for a in final_list:
+		if [v for v in a.values()][0] >= .14*maxcount:
+			awardslist.append(a)
+	awardslist = [[v.title() for v in d.keys()][0] for d in awardslist]
 	pprint(awardslist)
+	print(len(awardslist))
 
 #random.shuffle(tweets2015)
-x = FindAwards(tweets2015, 26)
+x = FindAwards(tweets2015)

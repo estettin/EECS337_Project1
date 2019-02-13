@@ -46,7 +46,7 @@ def PopulatePhrasesforAwards(tweet,count):
 					phrases[p] = count
 				break
 
-def PostProcessFindAwards(phrases, num_awards):
+def PostProcessFindAwards(phrases):
 	s = [{k: phrases[k]} for k in sorted(phrases, key=phrases.get, reverse=True)]
 	thresh = [v for k,v in s[1000].items()][0]
 	sorted_phrases = {k: v for k, v in phrases.items() if v > thresh}
@@ -81,7 +81,11 @@ def PostProcessFindAwards(phrases, num_awards):
 				break
 
 	final_list = [{k: s_reduced[k]} for k in sorted(s_reduced, key=s_reduced.get, reverse=True)]
-	awardslist = final_list[:num_awards]
+	maxcount = [v for v in final_list[0].values()][0]
+	awardslist = []
+	for a in final_list:
+		if [v for v in a.values()][0] >= .14*maxcount:
+			awardslist.append(a)
 	awardslist = [[v.title() for v in d.keys()][0] for d in awardslist]
 	return awardslist
 
