@@ -22,11 +22,10 @@ def get_hosts(year):
     # Your code here
 
     #look at shuffling and randomizing for the larger datasets
-    print("starting to find hosts")
+    
     tweets = tweetsorter.loadTweets(year)
     hosts = hosttest.getHost(tweets)
-    print("found hosts")
-    print("hosts: ", hosts)
+
     return hosts
 
 def get_awards(year):
@@ -125,12 +124,14 @@ def main():
             awards = config1819.awardarray
         winners_dict = {}
         presenters_dict = {}
+        nominees_dict = {}
         for award in awards:
             winners_dict[award.name] = Counter()
             presenters_dict[award.name] = Counter()
+            nominees_dict[award.name] = Counter()
 
-
-        print (tweet_count)
+        print ("Number of Unique Tweets :", tweet_count)
+        print("Progress:")
         for tweet in tweets_dictionary:
             
             # HOST TWEET
@@ -138,6 +139,7 @@ def main():
             # if count % 1000 == 0:
             #     print (count)
             # print (count)
+            
             if count == int(tweet_count/4):
                 print("25% done")
             elif count == int(tweet_count/2):
@@ -158,20 +160,22 @@ def main():
                     # add possible winners to dictionary
                     winner.findWinner(award,tweet, winners_dict[award.name], tweets_dictionary[tweet])
                     # add presenters to dictionary
-                    pres.findPresenters(award, tweet, presenters_dict[award.name] ,tweets_dictionary[tweet])
-
+                    pres.findPresenters(award, tweet, presenters_dict[award.name], tweets_dictionary[tweet])
+                    # add nominees to dictionary
+                    nom.findNominees(award, tweet, nominees_dict[award.name], tweets_dictionary[tweet])
 
                                         # WINNER
                     # winner.findWinner(award,tweet, winners_dict, tweets_dictionary[tweet])
                     # PRESENTERS
 
                     # NOMINEES
-        for award in awards:
-            print(award.name)
-            print(presenters_dict[award.name].most_common(3))
-        
+        # for award in awards:
+            # print(award.name)
+            # print(nominees_dict[award.name].most_common(10))
+        print("Done looking at tweets. Starting to analyze results")
         final_results = {}
         for a in awards:
+            print(a.name)
             final_results[a.name] = results.Award()
             
             final_results[a.name].name = a.name
@@ -181,31 +185,47 @@ def main():
                 final_results[a.name].winner = winners[0][0]
             else:
                 final_results[a.name].winner = ""
-            print(a.name, "     ", final_results[a.name].winner)
+            print("Winner: ", final_results[a.name].winner)
+ 
+            final_results[a.name].presenters = helpers.finalizePresenters(presenters_dict[a.name]) 
+            print("Presenters: ", final_results[a.name].presenters)
+            
+            final_results[a.name].nominees = helpers.finalizeNominees(nominees_dict[a.name], final_results[a.name].winner, a)
+            print("Nominees: ", final_results[a.name].nominees)
+            print( " ")
 
-            # 
-            presenters = presenters_dict[a.name].most_common(2) 
-            if len(presenters) > 0:
-                final_results[a.name].presenters = [presenters[0][0]]
-                if len(presenters) > 1 and presenters[1][1] >= .5 * presenters[0][1]:
-                    final_results[a.name].presenters.append(presenters[1][0])
-            else:
-                final_results[a.name].presenters = []
-            print(a.name, "     ", final_results[a.name].presenters)
-        
-    
-        # process winners for each award
-        # process presenters for each award
-        # process nominees for each award
-        # human print
-        # print(presenter_counter.most_common(3))
-        # Find host from bigram counter
-        print("Finding hosts")
         hosts = hosttest.determineHosts(presenter_counter)
         print("Hosts: ", hosts)
         print("Finished finding hosts")
+        hostJSON = {}
+        hostJSON["host"] = hosts
+        #awards
+        awardsJSON = {}
+        awardsJSON["awards"] = [] # 
+        #dumps
+        winnerJSON = {}
+        presentersJSON = {}
+        nomineesJSON = {}
+        
+        for a in awards:
+            winnerJSON[a.name] = final_results[a.name].winner
+            presentersJSON[a.name] = final_results[a.name].presenters
+            nomineesJSON[a.name] = final_results[a.name].nominees
 
-    
+        with open('results/' + year + "/" + "winner.json", 'w') as fp:
+            json.dump(winnerJSON, fp)
+        with open('results/' + year + "/" + "presenters.json", 'w') as fp:
+            json.dump(presentersJSON, fp)
+        with open('results/' + year + "/" + "nominees.json", 'w') as fp:
+            json.dump(nomineesJSON, fp)
+        with open('results/' + year + "/" + "hosts.json", 'w') as fp:
+            json.dump(hostJSON, fp)
+        with open('results/' + year + "/" + "awards.json", 'w') as fp:
+            json.dump(awardsJSON, fp)
+
+
+
+
 
     
 

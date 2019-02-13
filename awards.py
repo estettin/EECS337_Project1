@@ -17,7 +17,7 @@ def findPresenters(a, t, possnames, count):
 	nickname["J Lo"] = "Jennifer Lopez"
 	nickname["Lo"] = "Jennifer Lopez"
 	nickname["Arnold"] = "Arnold Schwarzenegger"
-	nickname["Robert Downey"] = " Robert Downey Jr."
+	nickname["Robert Downey"] = "Robert Downey Jr."
 	# if "presented by" in t:
 	# 	bytweets.append(t)
 	# if "present" in t:
@@ -29,6 +29,7 @@ def findPresenters(a, t, possnames, count):
 		if h1:
 			for e in h1:
 				e = cleanTweet(e,a)
+				# print("h1", e)
 				if e in nickname:
 					e = nickname[e]
 				if " " in e:
@@ -37,24 +38,17 @@ def findPresenters(a, t, possnames, count):
 		if h2: 
 			for e in h2:
 				e = cleanTweet(e,a)
+				# print("h2", e)
 				if e in nickname:
 					e = nickname[e]
 				if " " in e:
 					possnames[e] += count
-		morenames = getNames(ha[0],a)
-		for name in morenames:
-			if name in nickname:
-					name = nickname[name]
-			possnames[name] += count
-				# print(e)
-				# possnames.append()
-	ha2 = re.findall(" presented by (.*)", t, re.IGNORECASE)
-	if ha2:
-		morenames = getNames(cleanTweet(ha2[0],a),a)
-		for name in morenames:
-			if name in nickname:
-				name = nickname[name]
-			possnames[name] += count
+		# morenames = getNames(ha[0],a)
+		# print("Morenames: ", morenames)
+		# for name in morenames:
+		# 	if name in nickname:
+		# 			name = nickname[name]
+		# 	possnames[name] += count
 				# print(e)
 				# possnames.append()
 	return

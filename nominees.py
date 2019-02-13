@@ -12,62 +12,69 @@ import string
 from collections import Counter
 
 
-def findNominees(a, tweets):
-	keystrings = Counter()
-	ndict = Counter()
+def findNominees(a, t, keystrings, count):
 	# takes too long
-	for t in tweets:
-		"""
-		#find names within any sentence
-		s = re.findall("(.*)(nominee|nomina)(.*)",t,re.IGNORECASE)
-		if s:
-			tw = cleanTweet(t,a)
-			#or find names using the spacy entity
-			s2 = re.findall("([A-Z][a-z]+(?=\s[A-Z])(?:\s[A-Z][a-z]+))",tw)
-			if s2:
-				# print (t)
-				# print (s2)
-				for i in s2:
-					keystrings.append(i)
-		"""
-
-		#check these
-		r = re.findall("(.*) (?:(?:not win)|(?:is a lock)|(?:should win)|(?:should not win)|(?:better not win)|(?:didn\'t win)|(?:doesn\'t win)|(?:deserves to win)|(?:deserved to win)|(?:better win)|(?:is nominated for)|(?:was nominated for)|(?:will win)|(?:should've won)|(?:could win)|(?:has to win)|(?:is going to win)|(?:is gonna win)|(?:win ))", t, re.IGNORECASE)
-		if r and r[0] and "congrat" not in r[0].lower():
-			# find # or @
-			r1 = re.findall("([#@](?:[A-Z][a-z]*)(?:[A-Z][a-z]+))",r[0])
-			if r1:
-				for e in r1:
-					e = cleanTweet(e,a)
-					if not e == "":
-						keystrings[e] += 1
-					# print(e)
-			#if its a movie look for quoted things
-			if a.awardtype == "movie":
-				r2 = re.findall("(\".*\")",r[0])
-				if r2:
-					e = cleanTweet(r2[0],a)
-					if not e == "":
-						keystrings[e] += 1
+	"""
+	#find names within any sentence
+	s = re.findall("(.*)(nominee|nomina)(.*)",t,re.IGNORECASE)
+	if s:
+		tw = cleanTweet(t,a)
+		#or find names using the spacy entity
+		s2 = re.findall("([A-Z][a-z]+(?=\s[A-Z])(?:\s[A-Z][a-z]+))",tw)
+		if s2:
+			# print (t)
+			# print (s2)
+			for i in s2:
+				keystrings.append(i)
+	"""
+	#check these
+	r = re.findall("(.*) (?:(?:not win)|(?:is a lock)|(?:should win)|(?:should not win)|(?:better not win)|(?:didn\'t win)|(?:doesn\'t win)|(?:deserves to win)|(?:deserved to win)|(?:better win)|(?:is nominated for)|(?:was nominated for)|(?:will win)|(?:should've won)|(?:could win)|(?:has to win)|(?:is going to win)|(?:is gonna win)|(?:win ))", t, re.IGNORECASE)
+	if r and r[0] and "congrat" not in r[0].lower():
+		# find # or @
+		r1 = re.findall("([#@](?:[A-Z][a-z]*)(?:[A-Z][a-z]+))",r[0])
+		if r1:
+			for e in r1:
+				e = cleanTweet(e,a)
+				if not e == "":
+					keystrings[e] += count
+				# print(e)
+		#if its a movie look for quoted things
+		if a.awardtype == "movie":
+			r2 = re.findall("(\".*\")",r[0])
+			if r2:
+				e = cleanTweet(r2[0],a)
+				if not e == "":
+					keystrings[e] += count
 			#find titles
+
 			r3 = re.findall("([A-Z](?:[a-z]+|\.)(?:\s+[A-Z](?:[a-z]+|\.))*(?:\s+[a-z][a-z\-]+){0,2}\s+[A-Z](?:[a-z]+|\.))",r[0]) #get titles #https://stackoverflow.com/questions/7653942/find-names-with-regular-expression
 			if r3:
 				for e in r3:
-					e = cleanTweet(e,a)
+					# e = cleanTweet(e,a)
 					if not e == "":
-						keystrings[e] += 1
+						keystrings[e] += count
+		else:
+			r4 = re.findall("((?:[A-Z][-A-Za-z]*)(?:\s[A-Z][-A-Za-z]+))", r[0])
+			if r4:
+				for e in r4:
+					if not "golden" in e.lower():
+						keystrings[e] += count
 
-		# the hashtag or users
-		n = re.findall("Best(.*)nominee ([#@][A-z][a-zA-Z]*)", t, re.IGNORECASE)
-		if n:
-			keystrings[cleanTweet(n[0][1],a)] += 1
+	# the hashtag or users
+	n = re.findall("Best(.*)nominee ([#@][A-z][a-zA-Z]*)", t, re.IGNORECASE)
+	if n:
+		keystrings[cleanTweet(n[0][1],a)] += count
 	# print(keystrings)
-	ndict = nomineesCounter(keystrings,a)	
-	nominees = ndict.most_common(10)
-	finalnominees = []
-	for n in nominees:
-		finalnominees.append(n[0])
-	return finalnominees
+	# ndict = nomineesCounter(keystrings,a)	
+	# nominees = ndict.most_common(10)
+	# finalnominees = []
+	# for n in nominees:
+		# finalnominees.append(n[0])
+	return 
+
+
+
+
 
 def nomineesCounter(c,a):
 	atype = a.awardtype
@@ -88,7 +95,6 @@ def nomineesCounter(c,a):
 					if ent.label_ == "PERSON":
 						ndict[ent.text] = count
 	return ndict
-
 
 
 
