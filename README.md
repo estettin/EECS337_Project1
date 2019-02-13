@@ -11,8 +11,9 @@ In the command line:
 if this give you an ssl error, run 
 `bash /Applications/Python 3.6/Install Certificates.command`
 
+Non-Mac running Python 3 by default
 *Perform inside a python3 shell*:
-`~$: Python3`
+`~$: Python
 >> 
 ```>> import nltk
 >> nltk.download()``` in python3 shell open interactive installer
