@@ -4,5 +4,4 @@ pandas==0.24.1
 nltk==3.4
 IMDbPY==6.6
 pandas==0.24.0
-
 pprint==0.1
