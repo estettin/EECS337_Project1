@@ -94,6 +94,14 @@ JSON files with the correct answers for the minimum tasks for both 2013 and 2015
 
 
 TO SET UP:
+pip install nltk
+*Perform inside a shell*:
+>>import nltk
+>>nltk.download("punkt")
+>>nltk.download("averaged_perceptron_tagger")
+>>nltk.download('maxent_ne_chunker')
+>>nltk.download('words')
+
 
 python3 -m spacy download en_core_web_sm
 pip3 install -r requirements.txt
