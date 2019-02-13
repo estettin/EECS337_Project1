@@ -31,6 +31,9 @@ def removeRetweets(year):
 	with open('countDicts/d' + year + '.json', 'w') as fp:
 			json.dump(tweets, fp)
 
+def loadResultJson(year, t):
+	name = 'results/' + year + "/" + t + '.json'
+	return json.load(open(name))
 
 #loading preprocessed dictionaries from json
 def loadTweetsFromJson(year):

@@ -22,20 +22,16 @@ def get_hosts(year):
     # Your code here
 
     #look at shuffling and randomizing for the larger datasets
-    
-    tweets = tweetsorter.loadTweets(year)
-    hosts = hosttest.getHost(tweets)
-
+    values = helpers.loadResultJson(year, "hosts")
+    hosts = values["hosts"]
     return hosts
 
 def get_awards(year):
     '''Awards is a list of strings. Do NOT change the name
     of this function or what it returns.'''
     # Your code here
-    print("starting to find awards")
-    awards = [" "]
-    print("found awards")
-    print("awards: ", awards)
+    values = helpers.loadResultJson(year, "awards")
+    awards = values["awards"]
     return awards
 
 def get_nominees(year):
@@ -43,15 +39,7 @@ def get_nominees(year):
     names as keys, and each entry a list of strings. Do NOT change
     the name of this function or what it returns.'''
     # Your code here
-    print("starting to find nominees")
-    nominees = {}
-    d = helpers.loadDictionary(year)
-    a = config.awardarray
-    for award in a:
-        nominees[award.name] = nom.findNominees(award,d[award.name])
-    print("found nominees")
-    print("Nominees: ")
-    print(nominees)
+    nominees = helpers.loadResultJson(year, "nominees")
     return nominees
 
 def get_winner(year):
@@ -59,15 +47,7 @@ def get_winner(year):
     names as keys, and each entry containing a single string.
     Do NOT change the name of this function or what it returns.'''
     # Your code here
-    print("starting to find winners")
-    d = helpers.loadDictionary(year)
-    a = config.awardarray
-    winners = {}
-    for award in a:
-        winners[award.name] = winner.findWinner(award,d[award.name])
-    print("found winners")
-    print("winners: ")
-    print(winners)
+    winners = helpers.loadResultJson(year, "winners")
     return winners
 
 def get_presenters(year):
@@ -75,15 +55,7 @@ def get_presenters(year):
     names as keys, and each entry a list of strings. Do NOT change the
     name of this function or what it returns.'''
     # Your code here
-    print("starting to find presenters")
-    d = helpers.loadDictionary(year)
-    presenters = {}
-    a = config.awardarray
-    for award in a:
-        presenters[award.name] = pres.findPresenters(award,d[award.name])
-    print("found presenters")
-    print("presenters: ")
-    print(presenters)
+    presenters = helpers.loadResultJson(year, "presenters")
     return presenters
 
 def pre_ceremony():
@@ -198,7 +170,7 @@ def main():
         print("Hosts: ", hosts)
         print("Finished finding hosts")
         hostJSON = {}
-        hostJSON["host"] = hosts
+        hostJSON["hosts"] = hosts
         #awards
         awardsJSON = {}
         awardsJSON["awards"] = [] # 
@@ -212,7 +184,7 @@ def main():
             presentersJSON[a.name] = final_results[a.name].presenters
             nomineesJSON[a.name] = final_results[a.name].nominees
 
-        with open('results/' + year + "/" + "winner.json", 'w') as fp:
+        with open('results/' + year + "/" + "winners.json", 'w') as fp:
             json.dump(winnerJSON, fp)
         with open('results/' + year + "/" + "presenters.json", 'w') as fp:
             json.dump(presentersJSON, fp)
