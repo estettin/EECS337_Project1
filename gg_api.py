@@ -12,6 +12,7 @@ import awards as pres
 import nominees as nom
 from collections import Counter
 import results
+import findawards
 
 OFFICIAL_AWARDS = ['cecil b. demille award', 'best motion picture - drama', 'best performance by an actress in a motion picture - drama', 'best performance by an actor in a motion picture - drama', 'best motion picture - comedy or musical', 'best performance by an actress in a motion picture - comedy or musical', 'best performance by an actor in a motion picture - comedy or musical', 'best animated feature film', 'best foreign language film', 'best performance by an actress in a supporting role in a motion picture', 'best performance by an actor in a supporting role in a motion picture', 'best director - motion picture', 'best screenplay - motion picture', 'best original score - motion picture', 'best original song - motion picture', 'best television series - drama', 'best performance by an actress in a television series - drama', 'best performance by an actor in a television series - drama', 'best television series - comedy or musical', 'best performance by an actress in a television series - comedy or musical', 'best performance by an actor in a television series - comedy or musical', 'best mini-series or motion picture made for television', 'best performance by an actress in a mini-series or motion picture made for television', 'best performance by an actor in a mini-series or motion picture made for television', 'best performance by an actress in a supporting role in a series, mini-series or motion picture made for television', 'best performance by an actor in a supporting role in a series, mini-series or motion picture made for television']
 # put official awards in
@@ -83,7 +84,7 @@ def main():
     run when grading. Do NOT change the name of this function or
     what it returns.'''
     # Your code here
-    years = ["2013"]
+    years = ["2013","2015"]
     for year in years:
         tweets_dictionary = helpers.loadTweetsFromJson(year)
         
@@ -97,6 +98,7 @@ def main():
         winners_dict = {}
         presenters_dict = {}
         nominees_dict = {}
+        phrases = {}
         for award in awards:
             winners_dict[award.name] = Counter()
             presenters_dict[award.name] = Counter()
@@ -125,7 +127,7 @@ def main():
                     for bg in host_bigrams:
                         presenter_counter[bg] += 1
             # AWARDS
-
+            findawards.PopulatePhrasesforAwards(tweet,tweets_dictionary[tweet],phrases)
 
             for award in awards:
                 if tweetsorter.sortTweet(tweet,award): #is this tweet relevant for the given award
@@ -173,7 +175,7 @@ def main():
         hostJSON["hosts"] = hosts
         #awards
         awardsJSON = {}
-        awardsJSON["awards"] = [] # 
+        awardsJSON["awards"] = findawards.PostProcessFindAwards(phrases)
         #dumps
         winnerJSON = {}
         presentersJSON = {}
