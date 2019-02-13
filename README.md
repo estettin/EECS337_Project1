@@ -4,13 +4,8 @@ Elana Stettin, Jake Reifer, Kevin Chan, Eshan Tarneja
 
 TO SET UP:
 In the command line:
-`pip3 install -r requirements.txt`
+`pip3 install -r requirements.txt` on Mac or device running Python 2.7 by default or `pip install -r requirements.txt` on device running Python 3 by default
 `python3 -m spacy download en_core_web_sm`
-pip3 install nltk
-pip3 install pprint
-pip3 install spacy
-pip3 install pandas
-pip3 install imdb
 
 *Perform inside a python3 shell*:
 `~$: Python3`
