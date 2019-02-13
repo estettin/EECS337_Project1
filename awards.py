@@ -17,6 +17,7 @@ def findPresenters(a, t, possnames, count):
 	nickname["J Lo"] = "Jennifer Lopez"
 	nickname["Lo"] = "Jennifer Lopez"
 	nickname["Arnold"] = "Arnold Schwarzenegger"
+	nickname["Robert Downey"] = " Robert Downey Jr."
 	# if "presented by" in t:
 	# 	bytweets.append(t)
 	# if "present" in t:
