@@ -33,13 +33,18 @@ def getHostBigrams(tweet):
 			return bigrams
 	return []
 
-def regexHosts(tweet):
+def regexHosts(tweet, hosttweets):
 	hosts = []
 	r1 = re.findall("((?:[A-Z][a-z]+) (?:[A-Z][a-z]+)) (?:and|&amp;) ((?:[A-Z][a-z]+) (?:[A-Z][a-z]+)) host", tweet)
 	if r1:
 		for r in r1[0]:
 			if not r == "Golden Globes":
 				hosts.append(r)
+				if r in hosttweets:
+					hosttweets[r].append(tweet)
+				else:
+					hosttweets[r] = []
+					hosttweets[r].append(tweet)
 	else:
 		r2 = re.findall("(.*) host", tweet)
 		if r2:
@@ -47,7 +52,11 @@ def regexHosts(tweet):
 	 		if r3: 
 	 			for r in r3:
 	 				if not r == "Golden Globes":
-	 					hosts.append(r)
+	 					if r in hosttweets:
+	 						hosttweets[r].append(tweet)
+	 					else:
+	 						hosttweets[r] = []
+	 						hosttweets[r].append(tweet)
 	return hosts
 
 

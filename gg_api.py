@@ -13,6 +13,7 @@ import nominees as nom
 from collections import Counter
 import results
 import findawards
+import sentiment 
 
 OFFICIAL_AWARDS = ['cecil b. demille award', 'best motion picture - drama', 'best performance by an actress in a motion picture - drama', 'best performance by an actor in a motion picture - drama', 'best motion picture - comedy or musical', 'best performance by an actress in a motion picture - comedy or musical', 'best performance by an actor in a motion picture - comedy or musical', 'best animated feature film', 'best foreign language film', 'best performance by an actress in a supporting role in a motion picture', 'best performance by an actor in a supporting role in a motion picture', 'best director - motion picture', 'best screenplay - motion picture', 'best original score - motion picture', 'best original song - motion picture', 'best television series - drama', 'best performance by an actress in a television series - drama', 'best performance by an actor in a television series - drama', 'best television series - comedy or musical', 'best performance by an actress in a television series - comedy or musical', 'best performance by an actor in a television series - comedy or musical', 'best mini-series or motion picture made for television', 'best performance by an actress in a mini-series or motion picture made for television', 'best performance by an actor in a mini-series or motion picture made for television', 'best performance by an actress in a supporting role in a series, mini-series or motion picture made for television', 'best performance by an actor in a supporting role in a series, mini-series or motion picture made for television']
 # put official awards in
@@ -84,10 +85,10 @@ def main():
     run when grading. Do NOT change the name of this function or
     what it returns.'''
     # Your code here
-    years = ["2013","2015"]
+    years = ["2013"]
     for year in years:
         tweets_dictionary = helpers.loadTweetsFromJson(year)
-        
+        hosttweets = {}
         presenter_counter = Counter()
         tweet_count = len(tweets_dictionary)
         count = 0
@@ -122,7 +123,7 @@ def main():
                 print("75% done")
 
             if count < tweet_count / 4:
-                host_bigrams = hosttest.regexHosts(tweet)
+                host_bigrams = hosttest.regexHosts(tweet, hosttweets)
                 if len(host_bigrams) > 0:
                     for bg in host_bigrams:
                         presenter_counter[bg] += 1
@@ -196,6 +197,14 @@ def main():
             json.dump(hostJSON, fp)
         with open('results/' + year + "/" + "awards.json", 'w') as fp:
             json.dump(awardsJSON, fp)
+
+        host_sentiment = {}
+        for host in hosts:
+            host_sentiment[host] = sentiment.findSentiment(hosttweets[host])
+
+        print(host_sentiment)
+
+
 
 
 
