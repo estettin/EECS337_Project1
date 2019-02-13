@@ -1,9 +1,9 @@
-__pycache__/
-data/gg2015.json
-data/gg2013.json
+./__pycache__/
+gg2015.json
+gg2013.json
 tweets2015.csv
 ./.idea/
 ./__pycache__/
-csvs/tweets2013.csv
-csvs/tweets2015.csv
+tweets2013.csv
+tweets2015.csv
 dicts/
