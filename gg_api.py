@@ -86,7 +86,7 @@ def main():
     run when grading. Do NOT change the name of this function or
     what it returns.'''
     # Your code here
-    years = ["2013", "2015"]
+    years = ["2013"]
     for year in years:
         tweets_dictionary = helpers.loadTweetsFromJson(year)
         hosttweets = {}
@@ -154,36 +154,63 @@ def main():
         # for award in awards:
             # print(award.name)
             # print(nominees_dict[award.name].most_common(10))
+        print(" ")
         print("Done looking at tweets. Starting to analyze results")
+        print("Year: ", year)
+        print(" ")
         final_results = {}
+        hosts = hosttest.determineHosts(presenter_counter)
+        host_string = ""
+        for h in hosts:
+            host_string = host_string + h + ", "
+        print("Host(s): ", host_string)
+        print("")
+        hostJSON = {}
+        hostJSON["hosts"] = hosts
+
         for a in awards:
-            print(a.name)
+            print("Award: ", a.name.title())
             final_results[a.name] = results.Award()
-            
             final_results[a.name].name = a.name
 
-            winners = winners_dict[a.name].most_common(1) 
+            final_results[a.name].presenters = helpers.finalizePresenters(presenters_dict[a.name]) 
+            presenters_string = ""
+            for p in final_results[a.name].presenters:
+                presenters_string = presenters_string + p + ", "
+            print("Presenters: ", presenters_string)
+
+            winners = winners_dict[a.name].most_common(1)
             if len(winners) > 0:
                 final_results[a.name].winner = winners[0][0]
             else:
                 final_results[a.name].winner = ""
-            print("Winner: ", final_results[a.name].winner)
- 
-            final_results[a.name].presenters = helpers.finalizePresenters(presenters_dict[a.name]) 
-            print("Presenters: ", final_results[a.name].presenters)
+            winner_string = ""
+            if a.awardtype == "movie":
+                winner_string = '"' + final_results[a.name].winner + '"'
+            else:
+                winner_string = final_results[a.name].winner
+            print("Winner: ", winner_string)
+            
             
             final_results[a.name].nominees = helpers.finalizeNominees(nominees_dict[a.name], final_results[a.name].winner, a, year)
-            print("Nominees: ", final_results[a.name].nominees)
-            print( " ")
+            nominees_string = ""
+            if a.awardtype == "movie":
+                for n in final_results[a.name].nominees:
+                    nominees_string = '"' + n + '", '
+            else:
+                for n in final_results[a.name].nominees:
+                    nominees_string = n + ", "
+            print("Nominees: ", nominees_string)
+            print(" ")
 
-        hosts = hosttest.determineHosts(presenter_counter)
-        print("Hosts: ", hosts)
-        print("")
-        hostJSON = {}
-        hostJSON["hosts"] = hosts
+        
         #awards
         awardsJSON = {}
         awardsJSON["awards"] = findawards.PostProcessFindAwards(phrases)
+        print("Award Names:")
+        for a in awardsJSON["awards"]:
+            print("    ", a)
+        print(" ")
         #dumps
         winnerJSON = {}
         presentersJSON = {}
@@ -210,6 +237,7 @@ def main():
         for host in hosts:
             host_sentiment[host] = sentiment.findSentiment(hosttweets[host])
             print("     ", host, ": ", host_sentiment[host])
+        print("")
 
         best_dressed = best_dressed_counter.most_common(1)
         if len(best_dressed) > 0:
@@ -222,20 +250,10 @@ def main():
         else:
             worst_dressed = ""
         
-        
-        print("Best Dressed: ", best_dressed)
-        print("Worst Dressed: ", worst_dressed)
+        print("Red Carpet Info")
+        print("     Best Dressed: ", best_dressed)
+        print("     Worst Dressed: ", worst_dressed)
         print("")
-
-
-
-
-
-
-
-
-    
-
     return
 
 if __name__ == '__main__':
