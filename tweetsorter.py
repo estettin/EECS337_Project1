@@ -1,8 +1,4 @@
 import json
-import nltk
-from pprint import pprint
-from nltk.corpus import stopwords 
-from nltk.tokenize import word_tokenize 
 import re
 import spacy
 import config

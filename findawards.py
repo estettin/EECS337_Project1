@@ -5,10 +5,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize 
 from nltk.chunk import tree2conlltags
 import re
-import random
 import csv
-from random import sample
-import operator
 import copy
 
 
