@@ -7,6 +7,7 @@ import csv
 from collections import Counter
 import re
 from imdb import IMDb
+import random
 ia = IMDb()
 
 #creating preprocessed dictionaries into json
@@ -16,20 +17,27 @@ ia = IMDb()
 # 		json.dump(d, fp)
 
 def removeRetweets(year):
-	data = helpers.loadTweets(year)
+	data = loadTweets(year)
+	# print("DATA LENGTH:", len(data))
 	tweets = Counter()
+	if len(data) > 600000:
+		random.shuffle(data)
+		data = data[:600000]
 	for t in data:
 		r = re.findall("RT(?:.*): (.*)", t)
 		if r:
 			tweets[r[0]] += 1
 		else:
 			tweets[t] += 1
+	# print("After removing retweets :", len(tweets))
 
 	# print (tweets.most_common(100))
 	# print(len(tweets))
 
 	with open('countDicts/d' + year + '.json', 'w') as fp:
 			json.dump(tweets, fp)
+
+
 
 def loadResultJson(year, t):
 	name = 'results/' + year + "/" + t + '.json'
@@ -122,3 +130,36 @@ def finalizeNominees(c, winner, a, year):
 				final_list.append(nominees[j][0])
 			j = j + 1
 	return final_list
+
+def awardStopwords():
+	name = config.ceremony_name
+	name_words = name.split()
+	stops = []
+	for nw in name_words:
+		stops.append(nw)
+		stops.append(nw.capitalize())
+		if nw[len(nw)-1] == 's':
+			stops.append(nw[:len(nw)-1])
+	name = ''.join(name_words)
+	stops.append(name)
+	return stops
+
+
+
+def containsCeremonyName(phrase):
+	name = config.ceremony_name
+	bad_words = awardStopwords()
+	for bw in bad_words:
+		if bw in phrase:
+			return True
+	return False
+
+
+
+
+
+
+
+
+
+

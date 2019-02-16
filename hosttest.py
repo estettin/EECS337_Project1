@@ -4,11 +4,14 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from collections import Counter
 import re
+import helpers
+import config
 
 """ Gets the name(s) of the host(s) given a set of tweets """
 def getHostBigrams(tweet):
 	stops = set(stopwords.words('english'))
-	stops.update(["host","hosts","hosting","goldenglobes", "golden", "globes", "rt", "http", "next", "year"])
+	stops.update(["host","hosts","hosting", "rt", "http", "next", "year"])
+	stops.update(helpers.awardStopwords())
 	if "host" in tweet:
 		print(tweet)
 		string = ''.join([i if ord(i) < 128 else '' for i in tweet])
@@ -37,7 +40,7 @@ def regexHosts(tweet, hosttweets):
 	r1 = re.findall("((?:[A-Z][a-z]+) (?:[A-Z][a-z]+)) (?:and|&amp;) ((?:[A-Z][a-z]+) (?:[A-Z][a-z]+)) host", tweet)
 	if r1:
 		for r in r1[0]:
-			if not r == "Golden Globes":
+			if not r == config.ceremony_name.title():
 				hosts.append(r)
 				if r in hosttweets:
 					hosttweets[r].append(tweet)
@@ -50,7 +53,7 @@ def regexHosts(tweet, hosttweets):
 	 		r3 = re.findall("((?:[A-Z][a-z]+) (?:[A-Z][a-z]+))", r2[0])
 	 		if r3: 
 	 			for r in r3:
-	 				if not r == "Golden Globes":
+	 				if not r == config.ceremony_name.title():
 	 					if r in hosttweets:
 	 						hosttweets[r].append(tweet)
 	 					else:

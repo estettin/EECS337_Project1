@@ -10,23 +10,10 @@ from imdb import IMDb
 ia = IMDb()
 import string 
 from collections import Counter
+import helpers
 
 
 def findNominees(a, t, keystrings, count):
-	# takes too long
-	"""
-	#find names within any sentence
-	s = re.findall("(.*)(nominee|nomina)(.*)",t,re.IGNORECASE)
-	if s:
-		tw = cleanTweet(t,a)
-		#or find names using the spacy entity
-		s2 = re.findall("([A-Z][a-z]+(?=\s[A-Z])(?:\s[A-Z][a-z]+))",tw)
-		if s2:
-			# print (t)
-			# print (s2)
-			for i in s2:
-				keystrings.append(i)
-	"""
 	#check these
 	r = re.findall("(.*) (?:(?:not win)|(?:is a lock)|(?:should win)|(?:should not win)|(?:better not win)|(?:didn\'t win)|(?:doesn\'t win)|(?:deserves to win)|(?:deserved to win)|(?:better win)|(?:is nominated for)|(?:was nominated for)|(?:will win)|(?:should've won)|(?:could win)|(?:has to win)|(?:is going to win)|(?:is gonna win)|(?:win ))", t, re.IGNORECASE)
 	if r and r[0] and "congrat" not in r[0].lower():
@@ -64,12 +51,6 @@ def findNominees(a, t, keystrings, count):
 	n = re.findall("Best(.*)nominee ([#@][A-z][a-zA-Z]*)", t, re.IGNORECASE)
 	if n:
 		keystrings[cleanTweet(n[0][1],a)] += count
-	# print(keystrings)
-	# ndict = nomineesCounter(keystrings,a)	
-	# nominees = ndict.most_common(10)
-	# finalnominees = []
-	# for n in nominees:
-		# finalnominees.append(n[0])
 	return 
 
 
@@ -112,7 +93,8 @@ def cleanTweet(t, award):
 	# remove stopwords
 	awardname = award.name
 	stops = set(stopwords.words('english'))
-	stops.update(["elvis", "duran", "perez","hilton","news","vanity","fair", "host","hosts","hosting","goldenglobes", "golden", "globes", "oscar","oscars", "movies", "yahoo", "rt", "http","@","#", "movies", "movie", "award", "win", "wins", "globe", "&"])
+	stops.update(["host","hosts","hosting","rt", "http","@","#", "movies", "movie", "award", "win", "wins", "&"])
+	stops.update(helpers.awardStopwords())
 	awardwords=' '.join(re.sub( r"([A-Z])", r" \1", awardname).split())
 	awardwords=word_tokenize(awardwords)
 	awardwords=[word for word in awardwords if word.isalpha()]
@@ -125,13 +107,5 @@ def cleanTweet(t, award):
 	tweet = word_tokenize(tweet)
 	tweet = [word for word in tweet if word.lower() not in stops]
 	return " ".join(tweet)
-
-
-# "(didn\'t win)|(doesn\'t win)|(deserves to win)|(deserved to win)|(better win)|(is nominated for)|(was nominated for)", re.IGNORECASE)
-
-'''
-nominees are 
-hope/thought "(hop(e|ed|ing|es)|thought) (.*) w(on|in)"
-'''
 
 

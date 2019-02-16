@@ -90,12 +90,11 @@ def main():
     run when grading. Do NOT change the name of this function or
     what it returns.'''
     # Your code here
-    pre_ceremony()
-    years = ["2013"]
-
+    years = ["2015"]
     for year in years:
         tweets_dictionary = helpers.loadTweetsFromJson(year)
         hosttweets = {}
+        winner_award_tweets = {}
         presenter_counter = Counter()
         tweet_count = len(tweets_dictionary)
         count = 0
@@ -113,8 +112,9 @@ def main():
             winners_dict[award.name] = Counter()
             presenters_dict[award.name] = Counter()
             nominees_dict[award.name] = Counter()
+            winner_award_tweets[award.name] = {}
 
-        print ("Number of Unique Tweets :", tweet_count)
+        # print ("Number of Unique Tweets :", tweet_count)
         print("Progress:")
         for tweet in tweets_dictionary:
             
@@ -146,7 +146,7 @@ def main():
             for award in awards:
                 if tweetsorter.sortTweet(tweet,award): #is this tweet relevant for the given award
                     # add possible winners to dictionary
-                    winner.findWinner(award,tweet, winners_dict[award.name], tweets_dictionary[tweet])
+                    winner.findWinner(award,tweet, winners_dict[award.name], tweets_dictionary[tweet], winner_award_tweets[award.name])
                     # add presenters to dictionary
                     pres.findPresenters(award, tweet, presenters_dict[award.name], tweets_dictionary[tweet])
                     # add nominees to dictionary
@@ -186,6 +186,12 @@ def main():
             print("Presenters: ", presenters_string)
 
             winners = winners_dict[a.name].most_common(1)
+            final_winner_sentiment = {}
+            if len(winners)>0:
+                tweetsForWinner = winner_award_tweets[a.name][winners[0][0]] 
+                final_winner_sentiment[a.name] = sentiment.findSentiment(tweetsForWinner)
+            else:
+                final_winner_sentiment[a.name] = "N/A"
             if len(winners) > 0:
                 final_results[a.name].winner = winners[0][0]
             else:
@@ -196,6 +202,7 @@ def main():
             else:
                 winner_string = final_results[a.name].winner
             print("Winner: ", winner_string)
+            print("Winner Sentiment: ", final_winner_sentiment[a.name])
             
             
             final_results[a.name].nominees = helpers.finalizeNominees(nominees_dict[a.name], final_results[a.name].winner, a, year)
@@ -237,7 +244,7 @@ def main():
             json.dump(hostJSON, fp)
         with open('results/' + year + "/" + "awards.json", 'w') as fp:
             json.dump(awardsJSON, fp)
-
+        
         host_sentiment = {}
         print("Host Sentiment:")
         for host in hosts:

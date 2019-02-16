@@ -43,7 +43,7 @@ def PopulatePhrasesforAwards(tweet,count, phrases):
 
 def PostProcessFindAwards(phrases):
 	s = [{k: phrases[k]} for k in sorted(phrases, key=phrases.get, reverse=True)]
-	thresh = [v for k,v in s[1000].items()][0]
+	thresh = [v for k,v in s[int((len(s)/6))].items()][0]
 	sorted_phrases = {k: v for k, v in phrases.items() if v > thresh}
 	s_reduced = {}
 

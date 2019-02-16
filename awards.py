@@ -6,6 +6,7 @@ import re
 import spacy
 import config
 from collections import Counter
+import helpers
 
 def findPresenters(a, t, possnames, count):
 	presenters = []
@@ -16,11 +17,6 @@ def findPresenters(a, t, possnames, count):
 	nickname["Lo"] = "Jennifer Lopez"
 	nickname["Arnold"] = "Arnold Schwarzenegger"
 	nickname["Robert Downey"] = "Robert Downey Jr."
-	# if "presented by" in t:
-	# 	bytweets.append(t)
-	# if "present" in t:
-	# 	finaltweets.append(t)
-	# r = re.findall("(.*)and(.*)present(?:s|ed|ing)", t, re.IGNORECASE)
 	ha = re.findall("(.*)present(?:s|ed|ing)", t, re.IGNORECASE)
 	if ha:
 		h1 = re.findall("([#@](?:[A-Z][a-z]*)(?:[A-Z][a-z]+))",ha[0])
@@ -41,14 +37,6 @@ def findPresenters(a, t, possnames, count):
 					e = nickname[e]
 				if " " in e:
 					possnames[e] += count
-		# morenames = getNames(ha[0],a)
-		# print("Morenames: ", morenames)
-		# for name in morenames:
-		# 	if name in nickname:
-		# 			name = nickname[name]
-		# 	possnames[name] += count
-				# print(e)
-				# possnames.append()
 	return
 
 def getNames(tweet, award):
@@ -109,7 +97,8 @@ def cleanTweet(t, award):
 	# remove stopwords
 	awardname = award.name
 	stops = set(stopwords.words('english'))
-	stops.update(["elvis", "duran","perez","hilton","news","vanity","fair", "host","hosts","hosting","goldenglobes", "golden", "globes", "oscar","oscars", "movies", "yahoo", "rt", "http","@","#", "movies", "movie", "award", "win", "wins", "globe", "&"])
+	stops.update(["host","hosts","hosting","rt", "http","@","#", "movies", "movie", "award", "win", "wins","&"])
+	stops.update(helpers.awardStopwords())
 	awardwords=' '.join(re.sub( r"([A-Z])", r" \1", awardname).split())
 	awardwords=word_tokenize(awardwords)
 	awardwords=[word for word in awardwords if word.isalpha()]
