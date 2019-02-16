@@ -68,15 +68,18 @@ def pre_ceremony():
     plain text file. It is the first thing the TA will run when grading.
     Do NOT change the name of this function or what it returns.'''
     # Your code here
-    years = ["2013","2015"]
+    years = ["2013","2015", "2018", "2019"]
     for year in years:
-        print(year)
-        print("Creating CSVs")
-        helpers.createCSV(year)
-        print("Finished creating CSVs")
-        print("Getting rid of RTs") 
-        helpers.removeRetweets(year)
-        print("Finished getting rid of RTs")
+        try:
+            print(year)
+            print("Creating CSVs")
+            helpers.createCSV(year)
+            print("Finished creating CSVs")
+            print("Getting rid of RTs") 
+            helpers.removeRetweets(year)
+            print("Finished getting rid of RTs")
+        except:
+            print("Could not find data for year %s" % year)
     print("Pre-ceremony processing complete.")
     return
 
@@ -87,7 +90,9 @@ def main():
     run when grading. Do NOT change the name of this function or
     what it returns.'''
     # Your code here
+    pre_ceremony()
     years = ["2013"]
+
     for year in years:
         tweets_dictionary = helpers.loadTweetsFromJson(year)
         hosttweets = {}
