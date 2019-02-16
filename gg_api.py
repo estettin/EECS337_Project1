@@ -93,12 +93,12 @@ def main():
 
     years = ["2013", "2015", "2018", "2019"]
     for year in years:
-    	try:
-	        tweets_dictionary = helpers.loadTweetsFromJson(year)
-	    except:
-	    	print("Could not load tweets for %s" % year)
-	    	continue
-	    	
+        try:
+            tweets_dictionary = helpers.loadTweetsFromJson(year)
+        except:
+            print("Could not load tweets for %s" % year)
+            continue
+
         hosttweets = {}
         winner_award_tweets = {}
         presenter_counter = Counter()

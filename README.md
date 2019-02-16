@@ -6,15 +6,15 @@ Elana Stettin, Jake Reifer, Kevin Chan, Eshan Tarneja
 
 In the command line:
 `pip3 install -r requirements.txt` on Mac or device running Python 2.7 by default or `pip install -r requirements.txt` on device running Python 3 by default
-*Instructions below have paths specifically for Macs (change command and path to python3.6  and /Python 3.6/ to python3 and /Python 3/ if your computer does not require you specify 3.6 in these locations.* 
+*Instructions below have paths specifically for Macs (change command and path to python3.6  and /Python 3.6/ instead of python3 and /Python 3/ if your computer requires that to run python 3.* 
 
-- `python3.6 -m spacy download en_core_web_sm`
+- `python3 -m spacy download en_core_web_sm`
 
-- `sudo python3.6 -m nltk.downloader -d /usr/local/share/nltk_data all`
+- `sudo python3 -m nltk.downloader -d /usr/local/share/nltk_data all`
 
   - If this gives you an SSL error, run 
 
-    `bash /Applications/Python\ 3.6/Install\ Certificates.command`
+    `bash /Applications/Python\ 3/Install\ Certificates.command`
 
 For Non-Mac running Python 3 by default
 *Perform inside a python3 shell*:
