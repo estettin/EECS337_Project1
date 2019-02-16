@@ -90,9 +90,15 @@ def main():
     run when grading. Do NOT change the name of this function or
     what it returns.'''
     # Your code here
-    years = ["2015"]
+
+    years = ["2013", "2015", "2018", "2019"]
     for year in years:
-        tweets_dictionary = helpers.loadTweetsFromJson(year)
+    	try:
+	        tweets_dictionary = helpers.loadTweetsFromJson(year)
+	    except:
+	    	print("Could not load tweets for %s" % year)
+	    	continue
+	    	
         hosttweets = {}
         winner_award_tweets = {}
         presenter_counter = Counter()
