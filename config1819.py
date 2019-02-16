@@ -32,7 +32,7 @@ award3.ors = []
 award3.awardtype = "movie"
 
 award4 = award()
-award4.name = "best motion picture - comedy or musical"
+award4.name = "best motion picture - musical or comedy"
 award4.regex = ["Best Motion Picture(.*)Musical(.*)Comedy","Best Motion Picture(.*)Comedy(.*)Musical"]
 award4.must = ["best", "picture"]
 award4.mustnot = ["actor", "actress", "television", "tv", "series"]
@@ -40,8 +40,8 @@ award4.ors = ["comedy", "musical"]
 award4.awardtype = "movie"
 
 award5 = award()
-award5.name = "best foreign language film"
-award5.regex = ["Best Foreign Language Film"]
+award5.name = "best motion picture - foreign language"
+award5.regex = ["Best Foreign Language Film", "best motion picture(.*)foreign language"]
 award5.must = []
 award5.mustnot = ["actor", "actress", "television", "tv", "series"]
 award5.ors = ["best foreign film", "best foreign language film"]
@@ -56,11 +56,11 @@ award6.ors = []
 award6.awardtype = "person"
 
 award7 = award()
-award7.name = "best mini-series or motion picture made for television"
-award7.regex = ["Best Mini-Series(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Miniseries(.*)Motion Picture(.*)(for|made for) (TV|Television)","Best Mini Series(.*)Motion Picture(.*)(for|made for) (TV|Television)"]
+award7.name = "best television limited series or motion picture made for television"
+award7.regex = ["Best(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best(.*)Motion Picture(.*)(for|made for) (TV|Television)","Best(.*)Motion Picture(.*)(for|made for) (TV|Television)"]
 award7.must = []
 award7.mustnot = ["actor", "actress"]
-award7.ors = ["best miniseries", "best mini-series", "best mini series", "motion picture for tv", "motion picture for television", "motion picture made for tv", "motion picture made for television"]
+award7.ors = ["limited series", "motion picture for tv", "motion picture for television", "motion picture made for tv", "motion picture made for television"]
 award7.awardtype = "movie"
 
 award8 = award()
@@ -72,7 +72,7 @@ award8.ors = ["tv","television"]
 award8.awardtype = "movie"
 
 award9 = award()
-award9.name = "best television series - comedy or musical"
+award9.name = "best television series - musical or comedy"
 award9.regex = ["Best(.*)Series(.*)Comedy","Best(.*)Series(.*)Musical", "Best Comedy(.*)Series", "Best Musical(.*)Series"]
 award9.must = ["best"]
 award9.mustnot = ["actor", "actress", "picture", "drama"]
@@ -89,15 +89,15 @@ award10.ors = ["best original song","best song"]
 award10.awardtype = "movie"
 
 award11 = award()
-award11.name = "best animated feature film"
-award11.regex = ["Best Animated(.*)Film", "Best Animation"]
+award11.name = "best motion picture - animated"
+award11.regex = ["Best Animated(.*)Film", "Best Animation", "best motion picture(.*)animated"]
 award11.must = ["best"]
 award11.mustnot = ["actor", "actress", "picture"]
-award11.ors = ["animation","animated film", "animated feature film"]
+award11.ors = ["animation","animated film", "animated feature film", "animated"]
 award11.awardtype = "movie"
 
 award12 = award()
-award12.name = "best performance by an actor in a television series - comedy or musical"
+award12.name = "best performance by an actor in a television series - musical or comedy"
 award12.regex = ["Best(.*)Actor(.*)(TV|Television) (Series|Show)(.*)Comedy", "Best(.*)Actor(.*)(TV|Television) (Series|Show)(.*)Musical", "Best(.*)Actor(.*)Comedy(.*)(TV|Television) (Series|Show)", "Best(.*)Actor(.*)Musical(.*)(TV|Television) (Series|Show)"]
 award12.must = ["best", "actor"]
 award12.mustnot = ["actress", "movie", "supporting", "drama"]
@@ -122,7 +122,7 @@ award14.ors = ["movie", "motion-picture", "motion picture", "film"]
 award14.awardtype = "person"
 
 award15 = award()
-award15.name = "best performance by an actor in a motion picture - comedy or musical"
+award15.name = "best performance by an actor in a motion picture - musical or comedy"
 award15.regex = ["Best Actor(.*)Motion Picture(.*)Comedy", "Best Actor(.*)Comedy(.*)Motion Picture","Best Actor(.*)Musical(.*)Motion Picture", "Best Actor(.*)Musical Movie","Best Actor(.*)Comedy Movie", "Best Performance By An Actor(.*)Motion Picture(.*)Comedy","Best Performance By An Actor(.*)Motion Picture(.*)Musical","Best Performance By An Actor(.*)(Comedy|Musical) Motion Picture"]
 award15.must = ["best", "actor"]
 award15.mustnot = ["actress", "supporting", "drama"]
@@ -130,26 +130,26 @@ award15.ors = ["movie", "motion-picture", "motion picture", "film", "comedy", "m
 award15.awardtype = "person"
 
 award16 = award()
-award16.name = "best performance by an actor in a mini-series or motion picture made for television"
-award16.regex = ["Best Actor(.*)Mini-Series(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Actor(.*)Miniseries(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Actor(.*)Mini Series(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actor in a Mini-Series(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actor in a Miniseries(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actor in a Mini Series(.*)Motion Picture(.*)(for|made for) (TV|Television)"]
+award16.name = "best performance by an actor in a limited series or a motion picture made for television"
+award16.regex = ["Best Actor(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Actor(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Actor(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actor in a(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actor in a(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actor in a(.*)Motion Picture(.*)(for|made for) (TV|Television)"]
 award16.must = ["best", "actor"]
 award16.mustnot = ["actress", "supporting"]
-award16.ors = ["motion picture made for television","motion picture made for tv", "motion-picture for television","motion-picture for tv", "miniseries", "mini-series", "mini series"]
+award16.ors = ["motion picture made for television","motion picture made for tv", "motion-picture for television","motion-picture for tv"]
 award16.awardtype = "person"
 
 
 award17 = award()
-award17.name = "best performance by an actor in a supporting role in a series, mini-series or motion picture made for television"
-award17.regex = ["Best Supporting Actor(.*)Series(.*)Mini(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actor in a Supporting Role(.*)Series(.*)Mini(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Supporting Actor(.*)Series", "Best Supporting Actor(.*)Mini", "Best Supporting Actor(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Supporting Actor(.*)(TV|Television) (Movie|Film|Motion Picture)"]
+award17.name = "best performance by an actor in a supporting role in a series, limited series or motion picture made for television"
+award17.regex = ["Best Supporting Actor(.*)Series(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actor in a Supporting Role(.*)Series(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Supporting Actor(.*)Series", "Best Supporting Actor(.*)", "Best Supporting Actor(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Supporting Actor(.*)(TV|Television) (Movie|Film|Motion Picture)"]
 award17.must = ["best", "actor", "supporting"]
 award17.mustnot = ["actress"]
-award17.ors = ["motion picture made for television","motion picture made for tv", "motion-picture for television","motion-picture for tv", "miniseries", "mini-series", "mini series", "series"]
+award17.ors = ["motion picture made for television","motion picture made for tv", "motion-picture for television","motion-picture for tv"]
 award17.awardtype = "person"
 
 
 award18 = award()
-award18.name = "best performance by an actor in a supporting role in a motion picture"
-award18.regex = ["Best Supporting Actor in a Motion Picture", "Best Performance by an Actor in a Supporting Role in a Motion Picture"]
+award18.name = "best performance by an actor in a supporting role in any motion picture"
+award18.regex = ["Best Supporting Actor in any Motion Picture", "Best Performance by an Actor in a Supporting Role in any Motion Picture"]
 award18.must = ["best", "actor", "supporting"]
 award18.mustnot = ["television", "tv", "actress"]
 award18.ors = []
@@ -157,7 +157,7 @@ award18.awardtype = "person"
 
 
 award19 = award()
-award19.name = "best performance by an actress in a television series - comedy or musical"
+award19.name = "best performance by an actress in a television series - musical or comedy"
 award19.regex = ["Best(.*)Actress(.*)(TV|Television) (Series|Show)(.*)Comedy", "Best(.*)Actress(.*)(TV|Television) (Series|Show)(.*)Musical", "Best(.*)Actress(.*)Comedy(.*)(TV|Television) (Series|Show)", "Best(.*)Actress(.*)Musical(.*)(TV|Television) (Series|Show)"]
 award19.must = ["best", "actress"]
 award19.mustnot = ["actor", "movie", "supporting", "drama"]
@@ -181,7 +181,7 @@ award21.ors = ["movie", "motion-picture", "motion picture", "film"]
 award21.awardtype = "person"
 
 award22 = award()
-award22.name = "best performance by an actress in a motion picture - comedy or musical"
+award22.name = "best performance by an actress in a motion picture - musical or comedy"
 award22.regex = ["Best Actress(.*)Motion Picture(.*)Comedy", "Best Actress(.*)Comedy(.*)Motion Picture","Best Actress(.*)Musical(.*)Motion Picture", "Best Actress(.*)Musical Movie","Best Actress(.*)Comedy Movie", "Best Performance By An Actress(.*)Motion Picture(.*)Comedy","Best Performance By An Actress(.*)Motion Picture(.*)Musical","Best Performance By An Actress(.*)(Comedy|Musical) Motion Picture"]
 award22.must = ["best", "actress"]
 award22.mustnot = ["actor", "supporting", "drama"]
@@ -189,25 +189,25 @@ award22.ors = ["movie", "motion-picture", "motion picture", "film", "comedy", "m
 award22.awardtype = "person"
 
 award23 = award()
-award23.name = "best performance by an actress in a mini-series or motion picture made for television"
-award23.regex = ["Best Actress(.*)Mini-Series(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Actress(.*)Miniseries(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Actress(.*)Mini Series(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actress in a Mini-Series(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actress in a Miniseries(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actress in a Mini Series(.*)Motion Picture(.*)(for|made for) (TV|Television)"]
+award23.name = "best performance by an actress in a limited series or a motion picture made for television"
+award23.regex = ["Best Actress(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Actress(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Actress(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actress in a(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actress in a(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actress in a(.*)Motion Picture(.*)(for|made for) (TV|Television)"]
 award23.must = ["best", "actress"]
 award23.mustnot = ["actor", "supporting"]
-award23.ors = ["motion picture made for television","motion picture made for tv", "motion-picture for television","motion-picture for tv", "miniseries", "mini-series", "mini series"]
+award23.ors = ["motion picture made for television","motion picture made for tv", "motion-picture for television","motion-picture for tv"]
 award23.awardtype = "person"
 
 
 award24 = award()
-award24.name = "best performance by an actress in a supporting role in a series, mini-series or motion picture made for television"
-award24.regex = ["Best Supporting Actress(.*)Series(.*)Mini(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actress in a Supporting Role(.*)Series(.*)Mini(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Supporting Actress(.*)Series", "Best Supporting Actress(.*)Mini", "Best Supporting Actress(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Supporting Actress(.*)(TV|Television) (Movie|Film|Motion Picture)"]
+award24.name = "best performance by an actress in a supporting role in a series, limited series or motion picture made for television"
+award24.regex = ["Best Supporting Actress(.*)Series(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Performance by an Actress in a Supporting Role(.*)Series(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Supporting Actress(.*)Series", "Best Supporting Actress(.*)", "Best Supporting Actress(.*)Motion Picture(.*)(for|made for) (TV|Television)", "Best Supporting Actress(.*)(TV|Television) (Movie|Film|Motion Picture)"]
 award24.must = ["best", "actress", "supporting"]
 award24.mustnot = ["actor"]
-award24.ors = ["motion picture made for television","motion picture made for tv", "motion-picture for television","motion-picture for tv", "miniseries", "mini-series", "mini series", "series"]
+award24.ors = ["motion picture made for television","motion picture made for tv", "motion-picture for television","motion-picture for tv", "series"]
 award24.awardtype = "person"
 
 award25 = award()
-award25.name = "best performance by an actress in a supporting role in a motion picture"
-award25.regex = ["Best Supporting Actress in a Motion Picture", "Best Performance by an Actress in a Supporting Role in a Motion Picture"]
+award25.name = "best performance by an actress in a supporting role in any motion picture"
+award25.regex = ["Best Supporting Actress in a Motion Picture", "Best Performance by an Actress in a Supporting Role in any Motion Picture"]
 award25.must = ["best", "actress", "supporting"]
 award25.mustnot = ["television", "tv", "actor"]
 award25.ors = []
@@ -221,9 +221,6 @@ award26.mustnot = ["best"]
 award26.ors = ["cecil b demille award","cecil b. demille award","cecil b. de mille award", "cecil b de mille award"]
 award26.awardtype = "person"
 
+
+
 awardarray = [award1,award2,award3,award4,award5, award6,award7, award8, award9, award10, award11, award12, award13, award14,award15,award16,award17,award18,award19,award20,award21,award22,award23,award24,award25,award26]
-
-ceremony_name = "golden globes"
-
-
-

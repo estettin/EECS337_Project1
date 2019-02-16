@@ -1,8 +1,4 @@
 import json
-import nltk
-from pprint import pprint
-from nltk.corpus import stopwords 
-from nltk.tokenize import word_tokenize 
 import re
 import spacy
 import config
@@ -30,39 +26,50 @@ def loadTweets(year):
 
 
 # data = tweets2013
-
-
+def sortTweet(tweet, award):
+	mustnot = award.mustnot
+	foundmn = False
+	for mn in mustnot:
+		if mn in tweet:
+			return False
+	# check regex
+	found = False
+	found = regexCheck(tweet, award)
+	if not found:
+		#check keywords
+		found = keywordCheck(tweet,award)
+	return found
 
 
 # return dictionary of tweets for each award
-def sortTweets(year, awards):
-	data = loadTweets(year)
-	# print("starting tweet sorting")
-	awarddict = {}
-	for a in awards:
-		awarddict[a.name] = []
-	for i in range(0,len(data)):
-		for award in awards:
-			# check must nots
-			mustnot = award.mustnot
-			foundmn = False
-			for mn in mustnot:
-				if mn in data[i]:
-					foundmn = True
-					break
-			if foundmn:
-				continue
-			# check regex
-			found = regexCheck(data[i], award)
-			if not found:
-				#check keywords
-				found = keywordCheck(data[i],award)
-			if found:
-				awarddict[award.name].append(data[i])
-	# for k in awarddict:
-	 	# print(k, len(awarddict[k]))
-	# print("Tweet Preprocessing Complete")
-	return awarddict
+# def sortTweets(year, awards):
+# 	data = loadTweets(year)
+# 	# print("starting tweet sorting")
+# 	awarddict = {}
+# 	for a in awards:
+# 		awarddict[a.name] = []
+# 	for i in range(0,len(data)):
+# 		for award in awards:
+# 			# check must nots
+# 			mustnot = award.mustnot
+# 			foundmn = False
+# 			for mn in mustnot:
+# 				if mn in data[i]:
+# 					foundmn = True
+# 					break
+# 			if foundmn:
+# 				continue
+# 			# check regex
+# 			found = regexCheck(data[i], award)
+# 			if not found:
+# 				#check keywords
+# 				found = keywordCheck(data[i],award)
+# 			if found:
+# 				awarddict[award.name].append(data[i])
+# 	# for k in awarddict:
+# 	 	# print(k, len(awarddict[k]))
+# 	# print("Tweet Preprocessing Complete")
+# 	return awarddict
 
 
 def regexCheck(tweet, award):
@@ -93,15 +100,4 @@ def keywordCheck(tweet, award):
 	if len(ors) == 0:
 		found = True
 	return found
-
-
-# d = sortTweets(data, config.awardarray)
-
-# a1 = config.awardarray[0]
-# print(awards.findTweetsWithAwardName(a1,d[a1.name]))
-# for award in config.awardarray:
-	# print(awards.findTweetsWithAwardName(award,d[award.name]))
-# for i in range(0,len(data)):
-# 	if "presented by" in data[i]:
-# 		print(data[i])
 

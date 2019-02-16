@@ -79,11 +79,11 @@ award2.nominees = ["Lady Bird", "The Disaster Artist", "Get Out", "The Greatest 
 award2.winner = "Lady Bird"
 r.awards = [award1, award2]
 
-humanPrint(r)
-print ("")
-print ("")
-print ("")
-print (jsonPrint(r))
+# humanPrint(r)
+# print ("")
+# print ("")
+# print ("")
+# print (jsonPrint(r))
 
 
 

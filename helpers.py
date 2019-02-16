@@ -4,6 +4,11 @@ import json
 import pandas as pd
 from pandas.io.json import json_normalize
 import csv
+from collections import Counter
+import re
+from imdb import IMDb
+import random
+ia = IMDb()
 
 #creating preprocessed dictionaries into json
 # def createDictionary(year):
@@ -11,8 +16,35 @@ import csv
 # 	with open('dicts/d' + year + '.json', 'w') as fp:
 # 		json.dump(d, fp)
 
+def removeRetweets(year):
+	data = loadTweets(year)
+	# print("DATA LENGTH:", len(data))
+	tweets = Counter()
+	if len(data) > 600000:
+		random.shuffle(data)
+		data = data[:600000]
+	for t in data:
+		r = re.findall("RT(?:.*): (.*)", t)
+		if r:
+			tweets[r[0]] += 1
+		else:
+			tweets[t] += 1
+	# print("After removing retweets :", len(tweets))
+
+	# print (tweets.most_common(100))
+	# print(len(tweets))
+
+	with open('countDicts/d' + year + '.json', 'w') as fp:
+			json.dump(tweets, fp)
+
+
+
+def loadResultJson(year, t):
+	name = 'results/' + year + "/" + t + '.json'
+	return json.load(open(name))
+
 #loading preprocessed dictionaries from json
-def loadDictionary(year):
+def loadTweetsFromJson(year):
 	name = 'countDicts/d' + year + '.json'
 	return json.load(open(name))
 
@@ -28,7 +60,7 @@ def loadTweets(year):
 
 #create csv files with all the tweets
 def createCSV(year):
-	name = "data/gg" + year + ".json"
+	name = "gg" + year + ".json"
 	name2 = "csvs/tweets" + year + ".csv"
 	file = open(name, 'r')
 	data_json = json.loads(file.read())
@@ -36,3 +68,98 @@ def createCSV(year):
 	with open(name2,'w') as resultFile:
 		wr = csv.writer(resultFile, quoting=csv.QUOTE_ALL)
 		wr.writerow(tweets2013)
+
+
+def finalizePresenters(d):
+	presenters = d.most_common(10)
+	final_list = []
+	if len(presenters) > 0:
+		final_list.append(presenters[0][0])
+		j = 1
+		while j < len(presenters):
+			if presenters[j][1] >= .5 * presenters[0][1]:
+				final_list.append(presenters[j][0])
+			j = j + 1
+	return final_list
+
+
+def finalizeNominees(c, winner, a, year):
+	atype = a.awardtype
+	ndict = Counter()
+	for k in c:
+		count = c[k]
+		if atype == "movie":
+			if len(k.split(" ")) < 5:
+				notMovies = ["best", "tv", "golden", "globe"]
+				good = True
+				for nm in notMovies:
+					if nm in k.lower():
+						good = False
+						break
+				if good:
+					movies = ia.search_movie(k)
+					if len(movies) > 0:
+						title = movies[0]["title"]
+						if not "television" in a.name:
+							if "year" in movies[0]:
+								movieyear = movies[0]["year"]
+								if int(year) == movieyear or int(year) - 1 == movieyear:
+									if not winner == title:
+										ndict[title] += count
+						else:
+							if not winner == title:
+								ndict[title] += count
+		else:
+			if len(k.split(" ")) < 4:
+				good = True
+				notPeople = ["best", "tv", "golden", "globe"]
+				for np in notPeople:
+					if np in k.lower():
+						good = False
+						break
+				if good and not winner == k:
+					ndict[k] += count
+	#confidence 
+	nominees = ndict.most_common(7)
+	final_list = []
+	if len(nominees) > 0:
+		final_list.append(nominees[0][0])
+		j = 1
+		while j < len(nominees):
+			if nominees[j][1] >= .2 * nominees[0][1]:
+				final_list.append(nominees[j][0])
+			j = j + 1
+	return final_list
+
+def awardStopwords():
+	name = config.ceremony_name
+	name_words = name.split()
+	stops = []
+	for nw in name_words:
+		stops.append(nw)
+		stops.append(nw.capitalize())
+		if nw[len(nw)-1] == 's':
+			stops.append(nw[:len(nw)-1])
+	name = ''.join(name_words)
+	stops.append(name)
+	return stops
+
+
+
+def containsCeremonyName(phrase):
+	name = config.ceremony_name
+	bad_words = awardStopwords()
+	for bw in bad_words:
+		if bw in phrase:
+			return True
+	return False
+
+
+
+
+
+
+
+
+
+
